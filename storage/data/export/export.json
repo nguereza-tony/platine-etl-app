@@ -1,0 +1,101 @@
+[
+    {
+        "title": "M.",
+        "lastname": "NGUEREZA",
+        "firstname": "Tony",
+        "can_call": "Yes",
+        "can_email": "Yes",
+        "enterprise_id": "1",
+        "created_at": "2023-02-23 11:33:06",
+        "updated_at": "2023-08-12 14:33:35",
+        "email": "tnh@gmail.com"
+    },
+    {
+        "title": "Mme",
+        "lastname": "MBOUTOU",
+        "firstname": "Ingrid",
+        "can_call": "Yes",
+        "can_email": "Yes",
+        "enterprise_id": "1",
+        "created_at": "2023-04-01 10:52:17",
+        "updated_at": "2023-08-12 02:33:08",
+        "email": "mboutouthecle@gmail.com"
+    },
+    {
+        "title": "M.",
+        "lastname": "NGUEREZA",
+        "firstname": "Ethan",
+        "can_call": "Yes",
+        "can_email": "No",
+        "enterprise_id": "1",
+        "created_at": "2023-04-01 10:56:55",
+        "updated_at": "2023-08-21 06:19:14",
+        "email": "ethan.nguereza@gmail.com"
+    },
+    {
+        "title": "M.",
+        "lastname": "DOE",
+        "firstname": "John",
+        "can_call": "Yes",
+        "can_email": "Yes",
+        "enterprise_id": "1",
+        "created_at": "2023-04-19 05:57:36",
+        "updated_at": "2023-10-05 08:11:42",
+        "email": "john.doe@yahoo.fr"
+    },
+    {
+        "title": "M.",
+        "lastname": "POUTINE",
+        "firstname": "Vladimir",
+        "can_call": "Yes",
+        "can_email": "Yes",
+        "enterprise_id": "1",
+        "created_at": "2023-06-07 08:48:32",
+        "updated_at": null,
+        "email": "dg@cnss-rca.org"
+    },
+    {
+        "title": "M.",
+        "lastname": "GUEPE",
+        "firstname": "Veronique",
+        "can_call": "Yes",
+        "can_email": "Yes",
+        "enterprise_id": "1",
+        "created_at": "2023-06-08 06:38:06",
+        "updated_at": null,
+        "email": "finance@cnss.org"
+    },
+    {
+        "title": "M.",
+        "lastname": "HUTTON",
+        "firstname": "Timothy",
+        "can_call": "Yes",
+        "can_email": "Yes",
+        "enterprise_id": "1",
+        "created_at": "2023-10-04 05:00:35",
+        "updated_at": null,
+        "email": "t.hutton@cnss-rca.org"
+    },
+    {
+        "title": "M.",
+        "lastname": "POMERLEAU",
+        "firstname": "Huon",
+        "can_call": "Yes",
+        "can_email": "Yes",
+        "enterprise_id": "1",
+        "created_at": "2023-10-12 09:05:04",
+        "updated_at": null,
+        "email": "HuonPomerleau@rhyta.com"
+    },
+    {
+        "title": "M.",
+        "lastname": "WADE",
+        "firstname": "Wesley",
+        "can_call": "Yes",
+        "can_email": "Yes",
+        "enterprise_id": "1",
+        "created_at": "2023-10-13 09:08:43",
+        "updated_at": null,
+        "email": "WesleyRWade@rhyta.com"
+    }
+]

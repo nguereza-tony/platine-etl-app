@@ -1,0 +1,12 @@
+.env
+.idea
+git.sh
+tests.sh
+composer.lock
+vendor
+nbproject
+.phpunit.result.cache
+.php_cs.cache
+storage/tmp/logs/*.log
+storage/tmp/cache/*
+storage/tmp/session/*

@@ -1,0 +1,9 @@
+parameters:
+    level: 8
+    paths:
+        - app
+    parallel:
+        jobSize: 50
+        maximumNumberOfProcesses: 4
+    universalObjectCratesClasses:
+        - Platine\Orm\Entity
