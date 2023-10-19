@@ -1,82 +1,47 @@
 [
     {
-        "id": 1,
-        "field": "email",
-        "name": "E-mail",
-        "position": 1,
-        "default_value": null,
-        "parent_id": null,
-        "data_mapping_id": 1,
-        "data_definition_id": 1,
-        "created_at": {
-            "date": "2023-10-17 05:16:39.000000",
-            "timezone_type": 3,
-            "timezone": "Africa\/Bangui"
-        },
+        "email": "tnh@gmail.com",
+        "username": "tnh@gmail.com",
         "updated_at": null
     },
     {
-        "id": 2,
-        "field": "username",
-        "name": "Username",
-        "position": 2,
-        "default_value": null,
-        "parent_id": null,
-        "data_mapping_id": null,
-        "data_definition_id": 1,
-        "created_at": {
-            "date": "2023-10-17 05:19:31.000000",
-            "timezone_type": 3,
-            "timezone": "Africa\/Bangui"
-        },
+        "email": "mboutouthecle@gmail.com",
+        "username": "mboutouthecle@gmail.com",
         "updated_at": null
     },
     {
-        "id": 3,
-        "field": "email",
-        "name": "E-mail",
-        "position": 1,
-        "default_value": null,
-        "parent_id": null,
-        "data_mapping_id": 1,
-        "data_definition_id": 2,
-        "created_at": {
-            "date": "2023-10-17 05:16:39.000000",
-            "timezone_type": 3,
-            "timezone": "Africa\/Bangui"
-        },
+        "email": "ethan.nguereza@gmail.com",
+        "username": "ethan.nguereza@gmail.com",
         "updated_at": null
     },
     {
-        "id": 4,
-        "field": "username",
-        "name": "Username",
-        "position": 2,
-        "default_value": null,
-        "parent_id": null,
-        "data_mapping_id": null,
-        "data_definition_id": 2,
-        "created_at": {
-            "date": "2023-10-17 05:19:31.000000",
-            "timezone_type": 3,
-            "timezone": "Africa\/Bangui"
-        },
+        "email": "john.doe@yahoo.fr",
+        "username": "john.doe@yahoo.fr",
         "updated_at": null
     },
     {
-        "id": 5,
-        "field": "status",
-        "name": "Status",
-        "position": 3,
-        "default_value": null,
-        "parent_id": null,
-        "data_mapping_id": null,
-        "data_definition_id": 2,
-        "created_at": {
-            "date": "2023-10-19 05:49:59.000000",
-            "timezone_type": 3,
-            "timezone": "Africa\/Bangui"
-        },
+        "email": "dg@cnss-rca.org",
+        "username": "dg@cnss-rca.org",
+        "updated_at": null
+    },
+    {
+        "email": "finance@cnss.org",
+        "username": "finance@cnss.org",
+        "updated_at": null
+    },
+    {
+        "email": "t.hutton@cnss-rca.org",
+        "username": "t.hutton@cnss-rca.org",
+        "updated_at": null
+    },
+    {
+        "email": "HuonPomerleau@rhyta.com",
+        "username": "HuonPomerleau@rhyta.com",
+        "updated_at": null
+    },
+    {
+        "email": "WesleyRWade@rhyta.com",
+        "username": "WesleyRWade@rhyta.com",
         "updated_at": null
     }
 ]

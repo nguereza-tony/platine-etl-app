@@ -47,36 +47,25 @@ declare(strict_types=1);
 
 namespace Platine\App\Http\Action;
 
+use Platine\App\Helper\ActionHelper;
 use Platine\App\Model\Repository\DataDefinitionFieldRepository;
 use Platine\App\Model\Repository\DataDefinitionRepository;
 use Platine\App\Model\Repository\DataMappingRepository;
-use Platine\Config\Config;
+use Platine\Container\ContainerInterface;
 use Platine\Database\QueryBuilder;
 use Platine\Etl\EtlTool;
 use Platine\Etl\Event\FlushEvent;
 use Platine\Filesystem\Filesystem;
 use Platine\Framework\App\Application;
-use Platine\Framework\Http\RequestData;
-use Platine\Framework\Http\Response\TemplateResponse;
-use Platine\Http\Handler\RequestHandlerInterface;
 use Platine\Http\ResponseInterface;
-use Platine\Http\ServerRequestInterface;
-use Platine\Logger\LoggerInterface;
-use Platine\Template\Template;
 use RuntimeException;
 
 /**
  * @class HomeAction
  * @package Platine\App\Http\Action
  */
-class HomeAction implements RequestHandlerInterface
+class HomeAction extends BaseAction
 {
-    /**
-     * The template instance
-     * @var Template
-     */
-    protected Template $template;
-
     /**
      * The application instance
      * @var Application
@@ -85,27 +74,9 @@ class HomeAction implements RequestHandlerInterface
 
     /**
      *
-     * @var Config
-     */
-    protected Config $config;
-
-    /**
-     *
      * @var Filesystem
      */
     protected Filesystem $filesystem;
-
-    /**
-     *
-     * @var LoggerInterface
-     */
-    protected LoggerInterface $logger;
-
-    /**
-     *
-     * @var QueryBuilder
-     */
-    protected QueryBuilder $queryBuilder;
 
     /**
      *
@@ -125,35 +96,47 @@ class HomeAction implements RequestHandlerInterface
      */
     protected DataDefinitionFieldRepository $dataDefinitionFieldRepository;
 
+    protected QueryBuilder $queryBuilder;
+
+
+    /**
+     *
+     * @var ActionHelper
+     */
+    protected ActionHelper $actionHelper;
+
+    /**
+     *
+     * @var ContainerInterface
+     */
+    protected ContainerInterface $container;
+
 
     public function __construct(
-        Template $template,
-        Application $app,
+        ActionHelper $actionHelper,
+        ContainerInterface $container,
         Filesystem $filesystem,
-        LoggerInterface $logger,
         QueryBuilder $queryBuilder,
         DataMappingRepository $dataMappingRepository,
         DataDefinitionRepository $dataDefinitionRepository,
-        DataDefinitionFieldRepository $dataDefinitionFieldRepository,
-        Config $config
+        DataDefinitionFieldRepository $dataDefinitionFieldRepository
     ) {
+        parent::__construct($actionHelper);
+        $this->container = $container;
         $this->dataMappingRepository = $dataMappingRepository;
         $this->dataDefinitionRepository = $dataDefinitionRepository;
         $this->dataDefinitionFieldRepository = $dataDefinitionFieldRepository;
-        $this->template = $template;
-        $this->app = $app;
-        $this->config = $config;
         $this->filesystem = $filesystem;
-        $this->logger = $logger;
         $this->queryBuilder = $queryBuilder;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(ServerRequestInterface $request): ResponseInterface
+    public function respond(): ResponseInterface
     {
-        $param = new RequestData($request);
+        $param = $this->param;
+        $this->setView('home');
         $definitionId = (int) $param->get('definition', 1);
         $definition = $this->dataDefinitionRepository->find($definitionId);
         if ($definition === null) {
@@ -177,8 +160,8 @@ class HomeAction implements RequestHandlerInterface
         $etlTool = new EtlTool();
         $etlTool->setFlushCount(2);
 
-        $etlTool->extractor($this->app->get($definition->extractor))
-                ->loader($this->app->get($definition->loader))
+        $etlTool->extractor($this->container->get($definition->extractor))
+                ->loader($this->container->get($definition->loader))
                 ->onFlush(function (FlushEvent $e) {
                     $this->logger->info('Flush data -> Is partial: {partial}, counter: {counter}', [
                         'counter' => $e->getCounter(),
@@ -187,7 +170,7 @@ class HomeAction implements RequestHandlerInterface
                 });
 
         if ($definition->transformer !== null) {
-            $etlTool->transformer($this->app->get($definition->transformer));
+            $etlTool->transformer($this->container->get($definition->transformer));
         }
         $etl = $etlTool->create();
 
@@ -199,11 +182,9 @@ class HomeAction implements RequestHandlerInterface
             ]
         ]);
 
-        return new TemplateResponse(
-            $this->template,
-            'home',
-            $context
-        );
+        $this->sidebar->add('', 'Home', 'home');
+
+        return $this->viewResponse();
     }
 
 

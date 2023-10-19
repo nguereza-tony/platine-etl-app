@@ -47,6 +47,7 @@ declare(strict_types=1);
 
 namespace Platine\App\Provider;
 
+use Platine\App\Console\Command\MakeActionCommand;
 use Platine\App\Console\Command\ServerCommand;
 use Platine\Console\Command\Shell;
 use Platine\Framework\Service\ServiceProvider;
@@ -64,7 +65,9 @@ class ConsoleServiceProvider extends ServiceProvider
     {
         $this->app->bind(Shell::class);
         $this->app->bind(ServerCommand::class);
+        $this->app->bind(MakeActionCommand::class);
 
         $this->addCommand(ServerCommand::class);
+        $this->addCommand(MakeActionCommand::class);
     }
 }

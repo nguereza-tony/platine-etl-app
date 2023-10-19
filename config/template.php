@@ -1,6 +1,9 @@
 <?php
 
+use Platine\Framework\Template\Tag\CsrfTag;
 use Platine\Framework\Template\Tag\CurrentUrlTag;
+use Platine\Framework\Template\Tag\RouteUrlTag;
+use Platine\Framework\Template\Tag\SessionFlashTag;
 use Platine\Framework\Template\Tag\StaticTag;
 use Platine\Template\Cache\NullCache;
 
@@ -16,5 +19,8 @@ use Platine\Template\Cache\NullCache;
         'tags'           => [
             'static' => StaticTag::class,
             'current_url' => CurrentUrlTag::class,
+            'route_url' => RouteUrlTag::class,
+            'flash' => SessionFlashTag::class,
+            'csrf' => CsrfTag::class,
         ],
     ];

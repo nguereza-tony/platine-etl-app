@@ -47,11 +47,17 @@ declare(strict_types=1);
 
 namespace Platine\App\Provider;
 
+use Platine\App\Helper\ActionHelper;
+use Platine\App\Helper\Filter;
+use Platine\App\Helper\Sidebar;
+use Platine\App\Helper\StatusList;
+use Platine\App\Helper\ViewContext;
 use Platine\App\Http\Action\HomeAction;
 use Platine\App\Model\Repository\DataDefinitionFieldRepository;
 use Platine\App\Model\Repository\DataDefinitionRepository;
 use Platine\App\Model\Repository\DataMappingRepository;
 use Platine\Framework\Auth\Repository\UserRepository;
+use Platine\Framework\Helper\Flash;
 use Platine\Framework\Service\ServiceProvider;
 
 /**
@@ -74,5 +80,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(DataMappingRepository::class);
         $this->app->bind(DataDefinitionRepository::class);
         $this->app->bind(DataDefinitionFieldRepository::class);
+
+        $this->app->bind(ViewContext::class);
+        $this->app->bind(Sidebar::class);
+        $this->app->share(ActionHelper::class);
+        $this->app->bind(Flash::class);
+        $this->app->bind(Filter::class);
+        $this->app->share(StatusList::class);
     }
 }
