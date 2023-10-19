@@ -23,6 +23,9 @@ class AddDataDefinitionsTable20231017050035 extends AbstractMigration
             
             $table->string('description');
             
+            $table->string('model')
+                   ->description('Entity, table name, repository, container key, etc.');
+            
             $table->string('extractor')
                  ->description('The extractor to use')
                  ->notNull();

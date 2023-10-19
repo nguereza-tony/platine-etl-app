@@ -7,7 +7,6 @@ namespace Platine\App\Etl\Extractor;
 use Platine\Database\QueryBuilder;
 use Platine\Etl\Etl;
 use Platine\Etl\Extractor\ExtractorInterface;
-use Platine\Orm\Entity;
 
 class DbExtractor implements ExtractorInterface
 {
@@ -26,10 +25,13 @@ class DbExtractor implements ExtractorInterface
         $this->queryBuilder = $queryBuilder;
     }
 
-    public function extract($input, Etl $etl): iterable
+    public function extract($input, Etl $etl, array $options = []): iterable
     {
-        $results = $this->queryBuilder->from($input)
-                                     ->select()
+        $fields = $options['fields'] ?? [];
+        $definition = $options['definition'];
+
+        $results = $this->queryBuilder->from($definition->model)
+                                     ->select($fields['fields'] ?? [])
                                      ->fetchAssoc()
                                      ->all();
 

@@ -47,8 +47,11 @@ declare(strict_types=1);
 
 namespace Platine\App\Provider;
 
+use Platine\App\Etl\Extractor\DbExtractor;
+use Platine\App\Etl\Extractor\RepositoryExtractor;
 use Platine\Config\Config;
 use Platine\Container\ContainerInterface;
+use Platine\Database\QueryBuilder;
 use Platine\Etl\Etl;
 use Platine\Etl\Extractor\CsvExtractor;
 use Platine\Etl\Loader\JsonFileLoader;
@@ -68,14 +71,18 @@ class EtlServiceProvider extends ServiceProvider
     {
         $this->app->share('simple_transformer', function (ContainerInterface $app) {
             return function ($value, $key, Etl $etl, array $options = []) {
-                $value['can_email'] = $value['can_email'] === 'Y' ? 'Yes' : 'No';
-                $value['can_call'] = $value['can_call'] === 'Y' ? 'Yes' : 'No';
                 if (empty($value['updated_at'])) {
                     $value['updated_at'] = null;
                 }
 
-                if ($value['lastname'] === 'POUTINE') {
-                   // $etl->skipCurrentItem();
+                yield $key => $value;
+            };
+        });
+
+        $this->app->share('entity_transformer', function (ContainerInterface $app) {
+            return function ($value, $key, Etl $etl, array $options = []) {
+                if (empty($value->updated_at)) {
+                    $value->updated_at = null;
                 }
 
                 yield $key => $value;
@@ -95,6 +102,14 @@ class EtlServiceProvider extends ServiceProvider
                 CsvExtractor::EXTRACT_FROM_FILE,
                 true
             );
+        });
+
+        $this->app->share('db_extractor', function (ContainerInterface $app) {
+            return new DbExtractor($app->get(QueryBuilder::class));
+        });
+
+        $this->app->share('repository_extractor', function (ContainerInterface $app) {
+            return new RepositoryExtractor($app);
         });
     }
 }

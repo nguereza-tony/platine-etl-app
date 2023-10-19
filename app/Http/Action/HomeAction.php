@@ -56,6 +56,7 @@ use Platine\Etl\EtlTool;
 use Platine\Etl\Event\FlushEvent;
 use Platine\Filesystem\Filesystem;
 use Platine\Framework\App\Application;
+use Platine\Framework\Http\RequestData;
 use Platine\Framework\Http\Response\TemplateResponse;
 use Platine\Http\Handler\RequestHandlerInterface;
 use Platine\Http\ResponseInterface;
@@ -152,11 +153,15 @@ class HomeAction implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $definitionId = 1;
+        $param = new RequestData($request);
+        $definitionId = (int) $param->get('definition', 1);
         $definition = $this->dataDefinitionRepository->find($definitionId);
         if ($definition === null) {
             throw new RuntimeException(sprintf('Can not found data definition with id [%d]', $definitionId));
         }
+
+        $dataFields = $this->getDefinitionFields($definitionId);
+
 
         $context = [];
         $importCsvFilename = 'import.csv';
@@ -168,11 +173,6 @@ class HomeAction implements RequestHandlerInterface
 
         $importCsvPath = $tmpDir->getPath() . DIRECTORY_SEPARATOR . $importCsvFilename;
         $importJsonPath = $tmpDir->getPath() . DIRECTORY_SEPARATOR . $importJsonFilename;
-
-        $context['tmp_path'] = $tmpDir->getPath();
-        $context['export_path'] = $exportDir->getPath();
-        $context['import_csv_path'] = $importCsvPath;
-        $context['import_json_path'] = $importJsonPath;
 
         $etlTool = new EtlTool();
         $etlTool->setFlushCount(2);
@@ -191,12 +191,56 @@ class HomeAction implements RequestHandlerInterface
         }
         $etl = $etlTool->create();
 
-        $etl->process($importCsvPath, ['definition' => $definition]);
+        $etl->process($importCsvPath, [
+            'definition' => $definition,
+            'fields' => $dataFields,
+        ]);
 
         return new TemplateResponse(
             $this->template,
             'home',
             $context
         );
+    }
+
+
+    protected function getDefinitionFields(int $definitionId): array
+    {
+        $definitionFields = $this->dataDefinitionFieldRepository->filters(['definition' => $definitionId])
+                                                                ->with(['mapping'])
+                                                                ->orderBy('position')
+                                                                ->all();
+
+        $dataFields = [];
+        $fieldNames = [];
+        $displayNames = [];
+        foreach ($definitionFields as $row) {
+            $position = $row->position;
+            $default = $row->default_value;
+            $field = $row->field;
+            $displayName = $row->name;
+            $isMapping = false;
+            $mapping = $row->mapping;
+            if ($mapping !== null) {
+                $field = $mapping->field;
+                $displayName = $mapping->name;
+                $isMapping = true;
+            }
+
+            $fieldNames[] = $field;
+            $displayNames[] = $displayName;
+
+            $dataFields[] = [
+              'field' => $field,
+              'display_name' => $displayName,
+              'position' => $position,
+              'default' => $default,
+              'mapping' => $isMapping,
+            ];
+        }
+        $dataFields['fields'] = $fieldNames;
+        $dataFields['display_names'] = $displayNames;
+
+        return $dataFields;
     }
 }
