@@ -54,6 +54,7 @@ use Platine\Container\ContainerInterface;
 use Platine\Database\QueryBuilder;
 use Platine\Etl\Etl;
 use Platine\Etl\Extractor\CsvExtractor;
+use Platine\Etl\Loader\CsvFileLoader;
 use Platine\Etl\Loader\JsonFileLoader;
 use Platine\Filesystem\Filesystem;
 use Platine\Framework\Service\ServiceProvider;
@@ -85,7 +86,7 @@ class EtlServiceProvider extends ServiceProvider
                     $value->updated_at = null;
                 }
 
-                yield $key => $value;
+                yield $key => $value->jsonSerialize();
             };
         });
 
@@ -95,6 +96,14 @@ class EtlServiceProvider extends ServiceProvider
             $exportJsonPath = $exportDir->getPath() . DIRECTORY_SEPARATOR . 'export.json';
 
             return new JsonFileLoader($exportJsonPath, JSON_PRETTY_PRINT);
+        });
+
+        $this->app->share('csv_file_loader', function (ContainerInterface $app) {
+            $exportPath = $app->get(Config::class)->get('platform.data_export_path');
+            $exportDir = $app->get(Filesystem::class)->directory($exportPath);
+            $exportCsvPath = $exportDir->getPath() . DIRECTORY_SEPARATOR . 'export.csv';
+
+            return new CsvFileLoader($exportCsvPath);
         });
 
         $this->app->share('csv_file_extractor', function (ContainerInterface $app) {

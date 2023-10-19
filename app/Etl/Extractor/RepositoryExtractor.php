@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Platine\App\Etl\Extractor;
 
-use Platine\Collection\Generic\ArrayList;
 use Platine\Container\ContainerInterface;
 use Platine\Etl\Etl;
 use Platine\Etl\Extractor\ExtractorInterface;
@@ -35,7 +34,8 @@ class RepositoryExtractor implements ExtractorInterface
         /** @var RepositoryInterface $repository */
         $repository = $this->container->get($definition->model);
 
-        $results = $repository->all($fields['fields'] ?? []);
+        $results = $repository->query()
+                              ->all($fields['fields'] ?? [], false);
 
 
         return $results;

@@ -194,6 +194,9 @@ class HomeAction implements RequestHandlerInterface
         $etl->process($importCsvPath, [
             'definition' => $definition,
             'fields' => $dataFields,
+            'loader' => [
+                'keys' => $dataFields['display_names']
+            ]
         ]);
 
         return new TemplateResponse(
