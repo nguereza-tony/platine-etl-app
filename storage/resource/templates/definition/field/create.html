@@ -1,0 +1,113 @@
+{% extends "main" %}
+{% block body %}
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-white font-weight-bold">
+                    Enregistrement d'un attribut pour [{{ definition.name }}]
+                </div>
+                <div class="card-body">
+                    <form action="" method="post">
+                        {% csrf %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label for="field" class="col-md-4 col-form-label">
+                                        Attribut: <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input 
+                                            type="text" 
+                                            name="field" 
+                                            value="{{ param.field }}" 
+                                            required="true" 
+                                            placeholder="Entrer le nom de l'attribut"
+                                            class="form-control form-control-sm"
+                                        />
+                                        <span class="ferror">{{ errors.field }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label for="name" class="col-md-4 col-form-label">
+                                        Description: <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input 
+                                            type="text" 
+                                            name="name" 
+                                            value="{{ param.name }}" 
+                                            required="true" 
+                                            placeholder="Entrer la description"
+                                            class="form-control form-control-sm"
+                                        />
+                                        <span class="ferror">{{ errors.name }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label for="position" class="col-md-4 col-form-label">
+                                        Position: <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input 
+                                            type="number" 
+                                            name="position" 
+                                            min="1"
+                                            value="{{ param.position }}" 
+                                            required="true" 
+                                            placeholder="Entrer la position du champ"
+                                            class="form-control form-control-sm"
+                                        />
+                                        <span class="ferror">{{ errors.position }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label for="default_value" class="col-md-4 col-form-label">
+                                        Valeur par défaut:
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input 
+                                            type="text" 
+                                            name="default_value" 
+                                            value="{{ param.default_value }}" 
+                                            placeholder="Entrer la valeur par défaut"
+                                            class="form-control form-control-sm"
+                                        />
+                                        <span class="ferror">{{ errors.default_value }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label for="parent" class="col-md-4 col-form-label">
+                                        Parent: 
+                                    </label>
+                                    <div class="col-md-8">
+                                        <select 
+                                            name="parent" 
+                                            class="form-control form-control-sm select2js"
+                                        >
+                                            <option value="">--Aucun--</option>
+                                            {% for p in fields %}
+                                                <option {% if param.parent == p.id %}selected{% endif %} value="{{ p.id }}">{{ p.name }} ({{ p.field }})</option>
+                                            {% endfor %}
+                                        </select>
+                                        <span class="ferror">{{ errors.parent }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="offset-1 col pr-2">
+                                <button type="submit" class="btn btn-primary">Valider</button>
+                                <a href="{% route_url data_definition_detail id:definition.id %}" class="btn btn-dark">Annuler</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

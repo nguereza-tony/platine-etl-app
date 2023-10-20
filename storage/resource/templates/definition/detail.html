@@ -106,7 +106,7 @@
                                         <tbody>
                                             {% for a in fields %}
                                                 <tr>
-                                                    <td><a class="btn btn-xs btn-link" href="{% route_url data_definition_detail id:a.id %}">{{ a.field }}</a></td>
+                                                    <td><a class="btn btn-xs btn-link" href="{% route_url data_definition_field_edit id:a.id %}">{{ a.field }}</a></td>
                                                     <td>{{ a.name }}</td>
                                                     <td>{{ a.position }}</td>
                                                     <td>{{ a.default_value }}</td>
@@ -114,7 +114,7 @@
                                                     <td>{{ a.created_at|date:"d/m/Y H:i:s" }}</td>
                                                     <td>{{ a.updated_at|date:"d/m/Y H:i:s" }}</td>
                                                     <td  class="actions">
-                                                        <a href="{% route_url data_definition_detail id:u.id %}" class="btn btn-xs btn-icon btn-pill btn-danger" data-text-confirm="Etes-vous sûr de vouloir supprimer cet élément ?">
+                                                        <a href="{% route_url data_definition_field_delete id:a.id %}" class="btn btn-xs btn-icon btn-pill btn-danger" data-text-confirm="Etes-vous sûr de vouloir supprimer cet élément ?">
                                                             <i class="fa fa-fw fa-trash"></i>
                                                         </a>
                                                     </td>

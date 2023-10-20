@@ -91,7 +91,7 @@ class DataDefinitionDetailAction extends BaseAction
         $this->addSidebar('', 'Nouvelle définition', 'data_definition_create');
         $this->addSidebar('', 'Copier', 'data_definition_create', [], ['query' => ['from' => $id]]);
         $this->addSidebar('', 'Modifier', 'data_definition_edit', ['id' => $id]);
-        $this->addSidebar('', 'Ajouter un attribut', 'data_definition_detail', ['id' => $id]);
+        $this->addSidebar('', 'Ajouter un attribut', 'data_definition_field_create', ['id' => $id]);
         if (count($definitionFields) === 0) {
             $this->addSidebar('', 'Supprimer', 'data_definition_delete', ['id' => $id], ['confirm' => true]);
         }
