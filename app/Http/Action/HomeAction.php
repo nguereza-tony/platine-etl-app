@@ -50,7 +50,6 @@ namespace Platine\App\Http\Action;
 use Platine\App\Helper\ActionHelper;
 use Platine\App\Model\Repository\DataDefinitionFieldRepository;
 use Platine\App\Model\Repository\DataDefinitionRepository;
-use Platine\App\Model\Repository\DataMappingRepository;
 use Platine\Container\ContainerInterface;
 use Platine\Database\QueryBuilder;
 use Platine\Etl\EtlTool;
@@ -77,12 +76,6 @@ class HomeAction extends BaseAction
      * @var Filesystem
      */
     protected Filesystem $filesystem;
-
-    /**
-     *
-     * @var DataMappingRepository
-     */
-    protected DataMappingRepository $dataMappingRepository;
 
     /**
      *
@@ -117,13 +110,11 @@ class HomeAction extends BaseAction
         ContainerInterface $container,
         Filesystem $filesystem,
         QueryBuilder $queryBuilder,
-        DataMappingRepository $dataMappingRepository,
         DataDefinitionRepository $dataDefinitionRepository,
         DataDefinitionFieldRepository $dataDefinitionFieldRepository
     ) {
         parent::__construct($actionHelper);
         $this->container = $container;
-        $this->dataMappingRepository = $dataMappingRepository;
         $this->dataDefinitionRepository = $dataDefinitionRepository;
         $this->dataDefinitionFieldRepository = $dataDefinitionFieldRepository;
         $this->filesystem = $filesystem;

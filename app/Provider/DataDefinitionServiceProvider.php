@@ -48,7 +48,9 @@ declare(strict_types=1);
 namespace Platine\App\Provider;
 
 use Platine\App\Http\Action\DataDefinition\DataDefinitionCreateAction;
+use Platine\App\Http\Action\DataDefinition\DataDefinitionDeleteAction;
 use Platine\App\Http\Action\DataDefinition\DataDefinitionDetailAction;
+use Platine\App\Http\Action\DataDefinition\DataDefinitionEditAction;
 use Platine\App\Http\Action\DataDefinition\DataDefinitionListAction;
 use Platine\Framework\Service\ServiceProvider;
 use Platine\Route\Router;
@@ -67,6 +69,8 @@ class DataDefinitionServiceProvider extends ServiceProvider
         $this->app->bind(DataDefinitionListAction::class);
         $this->app->bind(DataDefinitionDetailAction::class);
         $this->app->bind(DataDefinitionCreateAction::class);
+        $this->app->bind(DataDefinitionEditAction::class);
+        $this->app->bind(DataDefinitionDeleteAction::class);
     }
 
     /**
@@ -77,7 +81,9 @@ class DataDefinitionServiceProvider extends ServiceProvider
         $router->group('/definitions', function (Router $router) {
             $router->get('', DataDefinitionListAction::class, 'data_definition_list');
             $router->get('/detail/{id}', DataDefinitionDetailAction::class, 'data_definition_detail');
+            $router->get('/delete/{id}', DataDefinitionDeleteAction::class, 'data_definition_delete');
             $router->add('/create', DataDefinitionCreateAction::class, ['GET', 'POST'], 'data_definition_create');
+            $router->add('/update/{id}', DataDefinitionEditAction::class, ['GET', 'POST'], 'data_definition_edit');
         });
     }
 }

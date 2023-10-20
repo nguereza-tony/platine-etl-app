@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Platine\App\Http\Action\DataDefinition;
 
+use Exception;
 use Platine\App\Helper\ActionHelper;
 use Platine\App\Http\Action\BaseAction;
 use Platine\App\Model\Entity\DataDefinition;
@@ -12,10 +13,10 @@ use Platine\App\Model\Repository\DataDefinitionRepository;
 use Platine\Http\ResponseInterface;
 
 /**
-* @class DataDefinitionDetailAction
+* @class DataDefinitionDeleteAction
 * @package Platine\App\Http\Action\DataDefinition
 */
-class DataDefinitionDetailAction extends BaseAction
+class DataDefinitionDeleteAction extends BaseAction
 {
     /**
     * The ActionHelper instance
@@ -58,8 +59,6 @@ class DataDefinitionDetailAction extends BaseAction
     */
     public function respond(): ResponseInterface
     {
-        $this->setView('definition/detail');
-
         $request = $this->request;
         $id = (int) $request->getAttribute('id');
 
@@ -72,30 +71,20 @@ class DataDefinitionDetailAction extends BaseAction
             return $this->redirect('data_definition_list');
         }
 
-        $this->addContext('definition', $dataDefinition);
-        $this->addContext('direction', $this->statusList->getDataDefinitionDirection());
-        $this->addContext('data_definition_repository', $this->statusList->getDataDefinitionRepository());
-        $this->addContext('data_definition_loader', $this->statusList->getDataDefinitionLoader());
-        $this->addContext('data_definition_extractor', $this->statusList->getDataDefinitionExtractor());
-        $this->addContext('data_definition_transformer', $this->statusList->getDataDefinitionTransformer());
-         $this->addContext('status', $this->statusList->getYesNoStatus());
+        try {
+            $this->dataDefinitionRepository->delete($dataDefinition);
 
-        $definitionFields = $this->dataDefinitionFieldRepository->filters(['definition' => $id])
-                                                                ->with(['parent'])
-                                                                ->orderBy('position')
-                                                                ->all();
+            $this->flash->setSuccess($this->lang->tr('Donnée supprimée avec succès'));
 
-        $this->addContext('fields', $definitionFields);
+            return $this->redirect('data_definition_list');
+        } catch (Exception $ex) {
+            $error = $this->parseForeignConstraintErrorMessage($ex->getMessage());
 
-        $this->addSidebar('', 'Définitions', 'data_definition_list');
-        $this->addSidebar('', 'Nouvelle définition', 'data_definition_create');
-        $this->addSidebar('', 'Copier', 'data_definition_create', [], ['query' => ['from' => $id]]);
-        $this->addSidebar('', 'Modifier', 'data_definition_edit', ['id' => $id]);
-        $this->addSidebar('', 'Ajouter un attribut', 'data_definition_detail', ['id' => $id]);
-        if (count($definitionFields) === 0) {
-            $this->addSidebar('', 'Supprimer', 'data_definition_delete', ['id' => $id], ['confirm' => true]);
+            $this->logger->error('Error when delete the data {error}', ['error' => $ex->getMessage()]);
+
+            $this->flash->setError($this->lang->tr('Erreur lors de traitement des données (%s)', $error));
+
+            return $this->redirect('data_definition_detail', ['id' => $id]);
         }
-
-        return $this->viewResponse();
     }
 }
