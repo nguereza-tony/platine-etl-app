@@ -70,9 +70,10 @@ class DataDefinitionListAction extends BaseAction
 
         $this->addContext('list', $results);
         $this->addContext('direction', $this->statusList->getDataDefinitionDirection());
+         $this->addContext('status', $this->statusList->getYesNoStatus());
 
 
-        $this->addSidebar('', 'Nouvelle définition', 'home');
+        $this->addSidebar('', 'Nouvelle définition', 'data_definition_create');
 
         return $this->viewResponse();
     }

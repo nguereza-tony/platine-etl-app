@@ -191,7 +191,6 @@ class HomeAction extends BaseAction
     protected function getDefinitionFields(int $definitionId): array
     {
         $definitionFields = $this->dataDefinitionFieldRepository->filters(['definition' => $definitionId])
-                                                                ->with(['mapping'])
                                                                 ->orderBy('position')
                                                                 ->all();
 
@@ -203,13 +202,6 @@ class HomeAction extends BaseAction
             $default = $row->default_value;
             $field = $row->field;
             $displayName = $row->name;
-            $isMapping = false;
-            $mapping = $row->mapping;
-            if ($mapping !== null) {
-                $field = $mapping->field;
-                $displayName = $mapping->name;
-                $isMapping = true;
-            }
 
             $fieldNames[] = $field;
             $displayNames[] = $displayName;
@@ -219,7 +211,6 @@ class HomeAction extends BaseAction
               'display_name' => $displayName,
               'position' => $position,
               'default' => $default,
-              'mapping' => $isMapping,
             ];
         }
         $dataFields['fields'] = $fieldNames;

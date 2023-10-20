@@ -42,6 +42,14 @@ class AddDataDefinitionsTable20231017050035 extends AbstractMigration
                  ->description('I=IN (Import), O=Out (Export)')
                  ->defaultValue('I')
                  ->notNull();
+            
+            $table->enum('status', ['N', 'Y'])
+                 ->defaultValue('Y')
+                 ->notNull();
+            
+            $table->enum('header', ['N', 'Y'])
+                 ->defaultValue('N')
+                 ->notNull();
 
             $table->string('field_separator')
                  ->description('Used for CSV, etc.');

@@ -55,7 +55,6 @@ use Platine\App\Helper\ViewContext;
 use Platine\App\Http\Action\HomeAction;
 use Platine\App\Model\Repository\DataDefinitionFieldRepository;
 use Platine\App\Model\Repository\DataDefinitionRepository;
-use Platine\App\Model\Repository\DataMappingRepository;
 use Platine\Framework\Auth\Repository\UserRepository;
 use Platine\Framework\Helper\Flash;
 use Platine\Framework\Service\ServiceProvider;
@@ -77,7 +76,6 @@ class AppServiceProvider extends ServiceProvider
          * Repositories
          */
         $this->app->bind(UserRepository::class);
-        $this->app->bind(DataMappingRepository::class);
         $this->app->bind(DataDefinitionRepository::class);
         $this->app->bind(DataDefinitionFieldRepository::class);
 

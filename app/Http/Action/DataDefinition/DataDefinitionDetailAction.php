@@ -78,19 +78,23 @@ class DataDefinitionDetailAction extends BaseAction
         $this->addContext('data_definition_loader', $this->statusList->getDataDefinitionLoader());
         $this->addContext('data_definition_extractor', $this->statusList->getDataDefinitionExtractor());
         $this->addContext('data_definition_transformer', $this->statusList->getDataDefinitionTransformer());
+         $this->addContext('status', $this->statusList->getYesNoStatus());
 
         $definitionFields = $this->dataDefinitionFieldRepository->filters(['definition' => $id])
-                                                                ->with(['mapping'])
+                                                                ->with(['parent'])
                                                                 ->orderBy('position')
                                                                 ->all();
 
         $this->addContext('fields', $definitionFields);
 
         $this->addSidebar('', 'Définitions', 'data_definition_list');
-        $this->addSidebar('', 'Nouvelle définition', 'home');
-        $this->addSidebar('', 'Copier', 'home', [], ['query' => ['from' => $id]]);
+        $this->addSidebar('', 'Nouvelle définition', 'data_definition_create');
+        $this->addSidebar('', 'Copier', 'data_definition_create', [], ['query' => ['from' => $id]]);
         $this->addSidebar('', 'Modifier', 'data_definition_detail', ['id' => $id]);
-        $this->addSidebar('', 'Supprimer', 'data_definition_detail', ['id' => $id], ['confirm' => true]);
+        $this->addSidebar('', 'Ajouter un attribut', 'data_definition_detail', ['id' => $id]);
+        if (count($definitionFields) === 0) {
+            $this->addSidebar('', 'Supprimer', 'data_definition_detail', ['id' => $id], ['confirm' => true]);
+        }
 
         return $this->viewResponse();
     }

@@ -36,19 +36,12 @@ class AddDataDefinitionFieldsTable20231017050049 extends AbstractMigration
             $table->integer('parent_id')
                 ->description('The field parent');
 
-            $table->integer('data_mapping_id')
-                ->description('The data mapping');
-            
             $table->integer('data_definition_id')
                 ->description('The data definition')
                  ->notNull();
 
             $table->timestamps();
 
-            $table->foreign('data_mapping_id')
-                ->references('data_mappings', 'id')
-                ->onDelete('NO ACTION');
-            
             $table->foreign('data_definition_id')
                 ->references('data_definitions', 'id')
                 ->onDelete('NO ACTION');

@@ -47,6 +47,7 @@ declare(strict_types=1);
 
 namespace Platine\App\Provider;
 
+use Platine\App\Http\Action\DataDefinition\DataDefinitionCreateAction;
 use Platine\App\Http\Action\DataDefinition\DataDefinitionDetailAction;
 use Platine\App\Http\Action\DataDefinition\DataDefinitionListAction;
 use Platine\Framework\Service\ServiceProvider;
@@ -65,6 +66,7 @@ class DataDefinitionServiceProvider extends ServiceProvider
     {
         $this->app->bind(DataDefinitionListAction::class);
         $this->app->bind(DataDefinitionDetailAction::class);
+        $this->app->bind(DataDefinitionCreateAction::class);
     }
 
     /**
@@ -75,6 +77,7 @@ class DataDefinitionServiceProvider extends ServiceProvider
         $router->group('/definitions', function (Router $router) {
             $router->get('', DataDefinitionListAction::class, 'data_definition_list');
             $router->get('/detail/{id}', DataDefinitionDetailAction::class, 'data_definition_detail');
+            $router->add('/create', DataDefinitionCreateAction::class, ['GET', 'POST'], 'data_definition_create');
         });
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Platine\App\Helper;
 
 use Platine\App\Enum\DataDefinitionDirection;
+use Platine\App\Enum\YesNoStatus;
 use Platine\App\Model\Repository\DataDefinitionFieldRepository;
 use Platine\Framework\Auth\Repository\UserRepository;
 use Platine\Lang\Lang;
@@ -40,6 +41,18 @@ class StatusList
         return [
             DataDefinitionDirection::IN => $this->lang->tr('Import'),
             DataDefinitionDirection::OUT => $this->lang->tr('Export'),
+        ];
+    }
+
+    /**
+     *
+     * @return array<string, mixed>
+     */
+    public function getYesNoStatus(): array
+    {
+        return [
+            YesNoStatus::YES => $this->lang->tr('Oui'),
+            YesNoStatus::NO => $this->lang->tr('Non'),
         ];
     }
 

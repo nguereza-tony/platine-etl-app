@@ -29,7 +29,6 @@ class DataDefinitionField extends Entity
          ]);
 
          $mapper->relation('definition')->belongsTo(DataDefinition::class);
-         $mapper->relation('mapping')->belongsTo(DataMapping::class);
          $mapper->relation('parent')->belongsTo(DataDefinitionField::class, new ForeignKey([
             'id' => 'parent_id'
          ]));
@@ -40,10 +39,6 @@ class DataDefinitionField extends Entity
 
          $mapper->filter('definition', function (Query $q, $value) {
              $q->where('data_definition_id')->is($value);
-         });
-
-         $mapper->filter('mapping', function (Query $q, $value) {
-             $q->where('data_mapping_id')->is($value);
          });
     }
 }

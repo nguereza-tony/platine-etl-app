@@ -1,0 +1,232 @@
+{% extends "main" %}
+{% block body %}
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-white font-weight-bold">
+                    Enregistrement d'une définition des données
+                </div>
+                <div class="card-body">
+                    <form action="" method="post">
+                        {% csrf %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label for="name" class="col-md-4 col-form-label">
+                                        Nom: <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input 
+                                            type="text" 
+                                            name="name" 
+                                            value="{{ param.name }}" 
+                                            required="true" 
+                                            placeholder="Entrer le nom"
+                                            class="form-control form-control-sm"
+                                        />
+                                        <span class="ferror">{{ errors.name }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label for="description" class="col-md-4 col-form-label">
+                                        Description:
+                                    </label>
+                                    <div class="col-md-8">
+                                        <textarea 
+                                            name="description" 
+                                            placeholder="Entrer la description"
+                                            class="form-control form-control-sm">{{ param.description }}</textarea>
+                                        <span class="ferror">{{ errors.description }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label for="direction" class="col-md-4 col-form-label">
+                                        Direction: <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <select 
+                                            name="direction" 
+                                            class="form-control form-control-sm select2js"
+                                            required="true"
+                                        >
+                                            {% for p in direction %}
+                                                <option {% if param.direction == p.0 %}selected{% endif %} value="{{ p.0 }}">{{ p.1 }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <span class="ferror">{{ errors.direction }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label for="model" class="col-md-4 col-form-label">
+                                        Modèle (entité): 
+                                    </label>
+                                    <div class="col-md-8">
+                                        <select 
+                                            name="model" 
+                                            class="form-control form-control-sm select2js"
+                                        >
+                                            <option value="">--Aucun--</option>
+                                            {% for p in data_definition_repository %}
+                                                <option {% if param.model == p.0 %}selected{% endif %} value="{{ p.0 }}">{{ p.1 }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <span class="ferror">{{ errors.model }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label for="transformer" class="col-md-4 col-form-label">
+                                        Formattage: 
+                                    </label>
+                                    <div class="col-md-8">
+                                        <select 
+                                            name="transformer" 
+                                            class="form-control form-control-sm select2js"
+                                        >
+                                            <option value="">--Aucun--</option>
+                                            {% for p in data_definition_transformer %}
+                                                <option {% if param.transformer == p.0 %}selected{% endif %} value="{{ p.0 }}">{{ p.1 }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <span class="ferror">{{ errors.transformer }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label for="extractor" class="col-md-4 col-form-label">
+                                        Source: <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <select 
+                                            name="extractor" 
+                                            class="form-control form-control-sm select2js"
+                                            required="true"
+                                        >
+                                            {% for p in data_definition_extractor %}
+                                                <option {% if param.extractor == p.0 %}selected{% endif %} value="{{ p.0 }}">{{ p.1 }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <span class="ferror">{{ errors.extractor }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label for="loader" class="col-md-4 col-form-label">
+                                        Destination: <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <select 
+                                            name="loader" 
+                                            class="form-control form-control-sm select2js"
+                                            required="true"
+                                        >
+                                            {% for p in data_definition_loader %}
+                                                <option {% if param.loader == p.0 %}selected{% endif %} value="{{ p.0 }}">{{ p.1 }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <span class="ferror">{{ errors.loader }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label for="status" class="col-md-5 col-form-label">
+                                        Actif: <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <select 
+                                            name="status" 
+                                            class="form-control form-control-sm select2js"
+                                            required="true"
+                                        >
+                                            {% for p in status %}
+                                                <option {% if param.status == p.0 %}selected{% endif %} value="{{ p.0 }}">{{ p.1 }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <span class="ferror">{{ errors.status }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label for="header" class="col-md-5 col-form-label">
+                                        Contient les entêtes: <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <select 
+                                            name="header" 
+                                            class="form-control form-control-sm select2js"
+                                            required="true"
+                                        >
+                                            {% for p in status %}
+                                                <option {% if param.header == p.0 %}selected{% endif %} value="{{ p.0 }}">{{ p.1 }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <span class="ferror">{{ errors.header }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label for="field_separator" class="col-md-5 col-form-label">
+                                        Séparateur des champs:
+                                    </label>
+                                    <div class="col-md-7">
+                                        <input 
+                                            type="text" 
+                                            name="field_separator" 
+                                            value="{{ param.field_separator }}" 
+                                            placeholder="Entrer le séparateur des champs"
+                                            class="form-control form-control-sm"
+                                        />
+                                        <span class="ferror">{{ errors.field_separator }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label for="text_delimiter" class="col-md-5 col-form-label">
+                                        Délimiteur des textes:
+                                    </label>
+                                    <div class="col-md-7">
+                                        <input 
+                                            type="text" 
+                                            name="text_delimiter" 
+                                            value="{{ param.text_delimiter }}" 
+                                            placeholder="Entrer le délimiteur des textes"
+                                            class="form-control form-control-sm"
+                                        />
+                                        <span class="ferror">{{ errors.text_delimiter }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label for="escape_char" class="col-md-5 col-form-label">
+                                        Caractère d'échappement:
+                                    </label>
+                                    <div class="col-md-7">
+                                        <input 
+                                            type="text" 
+                                            name="escape_char" 
+                                            value="{{ param.escape_char }}" 
+                                            placeholder="Entrer le caractère d'échappement"
+                                            class="form-control form-control-sm"
+                                        />
+                                        <span class="ferror">{{ errors.escape_char }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="offset-1 col pr-2">
+                                <button type="submit" class="btn btn-primary">Valider</button>
+                                <a href="{% route_url data_definition_list %}" class="btn btn-dark">Annuler</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
