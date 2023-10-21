@@ -137,6 +137,7 @@ class DataDefinitionCreateAction extends BaseAction
             'loader' => $formParam->getLoader(),
             'description' => $description,
             'transformer' => $transformer,
+            'model' => $model,
             'filter' => $filter,
             'direction' => $direction,
             'field_separator' => $fieldSeparator,

@@ -141,6 +141,7 @@ class DataDefinitionEditAction extends BaseAction
         $dataDefinition->loader = $formParam->getLoader();
         $dataDefinition->description = $description;
         $dataDefinition->transformer = $transformer;
+        $dataDefinition->model = $model;
         $dataDefinition->filter = $filter;
         $dataDefinition->direction = $direction;
         $dataDefinition->field_separator = $fieldSeparator;
