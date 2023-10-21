@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Platine\App\Helper;
 
 use Platine\App\Enum\DataDefinitionDirection;
+use Platine\App\Enum\DataDefinitionImportStatus;
 use Platine\App\Enum\YesNoStatus;
 use Platine\App\Filter\UserFilter;
 use Platine\App\Model\Repository\DataDefinitionRepository;
@@ -31,6 +32,20 @@ class StatusList
         Lang $lang
     ) {
         $this->lang = $lang;
+    }
+
+    /**
+     *
+     * @return array<string, mixed>
+     */
+    public function getDataDefinitionImportStatus(): array
+    {
+        return [
+            DataDefinitionImportStatus::PENDING => $this->lang->tr('En attente'),
+            DataDefinitionImportStatus::PROCESSED => $this->lang->tr('Importé'),
+            DataDefinitionImportStatus::CANCELLED => $this->lang->tr('Annulé'),
+            DataDefinitionImportStatus::ERROR => $this->lang->tr('Erreur'),
+        ];
     }
 
     /**

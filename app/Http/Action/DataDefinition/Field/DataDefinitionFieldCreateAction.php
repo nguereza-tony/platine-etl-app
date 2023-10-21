@@ -121,6 +121,11 @@ class DataDefinitionFieldCreateAction extends BaseAction
             $defaultValue = null;
         }
 
+        $column = $formParam->getColumn();
+        if (empty($column)) {
+            $column = $formParam->getField();
+        }
+
         $parent = (int) $formParam->getParent();
         if ($parent <= 0) {
             $parent = null;
@@ -133,6 +138,7 @@ class DataDefinitionFieldCreateAction extends BaseAction
             'position' => (int) $formParam->getPosition(),
             'default_value' => $defaultValue,
             'parent_id' => $parent,
+            'column' => $column,
             'data_definition_id' => $id,
         ]);
 

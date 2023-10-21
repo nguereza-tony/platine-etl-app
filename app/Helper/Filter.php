@@ -411,6 +411,7 @@ class Filter
     /**
      * Render for hidden field
      * @param string $field
+     * @param bool $isForm
      * @return string
      */
     protected function renderH(string $field, bool $isForm = false): string
@@ -421,6 +422,7 @@ class Filter
     /**
      * Render for select field
      * @param string $field
+     * @param bool $isForm
      * @return string
      */
     protected function renderS(string $field, bool $isForm = false): string
@@ -431,15 +433,23 @@ class Filter
             return '';
         }
 
-        $str = '<div class="form-group row">';
+        if ($isForm) {
+            $str = '<div class="form-group row">';
+        } else {
+            $str = '';
+        }
         $title = $data['title'] ?? '';
         $label = str_replace(['[', ']'], '', $field);
         if (!empty($title)) {
-            $str .= <<<E
-                <label for="$label" class="col-md-3 col-form-label">
-                    $title:
-                </label>
-            E;
+            if ($isForm) {
+                $str .= <<<E
+                    <label for="$label" class="col-md-3 col-form-label">
+                        $title:
+                    </label>
+                E;
+            } else {
+                $str .= sprintf('<label for="%s">%s:</label> &nbsp;&nbsp;', $label, $title);
+            }
         }
         $extras = $data['extras'];
         $default = $data['value'];
@@ -459,15 +469,17 @@ class Filter
             unset($attributes['required']);
         }
 
-        if (!isset($attributes['class'])) {
-            $attributes['class'] = 'form-control form-control-sm';
-        } else {
-            if (strpos($attributes['class'], 'form-control') === false) {
-                $attributes['class'] .= ' form-control';
-            }
+        if ($isForm) {
+            if (!isset($attributes['class'])) {
+                $attributes['class'] = 'form-control form-control-sm';
+            } else {
+                if (strpos($attributes['class'], 'form-control') === false) {
+                    $attributes['class'] .= ' form-control';
+                }
 
-            if (strpos($attributes['class'], 'form-control-sm') === false) {
-                $attributes['class'] .= ' form-control-sm';
+                if (strpos($attributes['class'], 'form-control-sm') === false) {
+                    $attributes['class'] .= ' form-control-sm';
+                }
             }
         }
 
@@ -477,11 +489,13 @@ class Filter
             $value = (string) $value;
         }
 
-        $colWidth = 9;
-        if (empty($title)) {
-            $colWidth = 12;
+        if ($isForm) {
+            $colWidth = 9;
+            if (empty($title)) {
+                $colWidth = 12;
+            }
+            $str .= sprintf('<div class="col-md-%d">', $colWidth);
         }
-        $str .= sprintf('<div class="col-md-%d">', $colWidth);
         $str .= sprintf('<select %s>', Str::toAttribute($attributes));
         if (!isset($attributes['required'])) {
             $str .= sprintf('<option value="">%s</option>', '-- Tout --');
@@ -499,12 +513,16 @@ class Filter
             $str .= sprintf('<option value="%s" %s>%s</option>', $key, $selected ? 'selected' : '', $option);
         }
         $str .= '</select>';
-        $str .= '</div>';
+        if ($isForm) {
+            $str .= '</div>';
+        }
 
         if ($newLine) {
             $str .= '<br /><br />';
         }
-        $str .= '</div>';
+        if ($isForm) {
+            $str .= '</div>';
+        }
 
         return $str;
     }
@@ -512,6 +530,7 @@ class Filter
     /**
      * Render for radio field
      * @param string $field
+     * @param bool $isForm
      * @return string
      */
     protected function renderR(string $field, bool $isForm = false): string
@@ -522,6 +541,7 @@ class Filter
     /**
      * Render for checkbox field
      * @param string $field
+     * @param bool $isForm
      * @return string
      */
     protected function renderC(string $field, bool $isForm = false): string
@@ -532,6 +552,7 @@ class Filter
     /**
      * Render for date field
      * @param string $field
+     * @param bool $isForm
      * @return string
      */
     protected function renderD(string $field, bool $isForm = false): string
@@ -543,6 +564,7 @@ class Filter
      * Render common text field
      * @param string $field
      * @param string $type
+     * @param bool $isForm
      * @return string
      */
     protected function renderTextField(string $field, string $type, bool $isForm = false): string
@@ -551,15 +573,23 @@ class Filter
         if (empty($data)) {
             return '';
         }
-        $str = '<div class="form-group row">';
+        if ($isForm) {
+            $str = '<div class="form-group row">';
+        } else {
+            $str = '';
+        }
         $title = $data['title'] ?? '';
         $label = str_replace(['[', ']'], '', $field);
         if (!empty($title)) {
-            $str .= <<<E
-                <label for="$label" class="col-md-3 col-form-label">
-                    $title:
-                </label>
-            E;
+            if ($isForm) {
+                $str .= <<<E
+                    <label for="$label" class="col-md-3 col-form-label">
+                        $title:
+                    </label>
+                E;
+            } else {
+                $str .= sprintf('<label for="%s">%s:</label> &nbsp;&nbsp;', $label, $title);
+            }
         }
 
         $extras = $data['extras'];
@@ -576,15 +606,17 @@ class Filter
             unset($attributes['required']);
         }
 
-        if (!isset($attributes['class'])) {
-            $attributes['class'] = 'form-control form-control-sm';
-        } else {
-            if (strpos($attributes['class'], 'form-control') === false) {
-                $attributes['class'] .= ' form-control';
-            }
+        if ($isForm) {
+            if (!isset($attributes['class'])) {
+                $attributes['class'] = 'form-control form-control-sm';
+            } else {
+                if (strpos($attributes['class'], 'form-control') === false) {
+                    $attributes['class'] .= ' form-control';
+                }
 
-            if (strpos($attributes['class'], 'form-control-sm') === false) {
-                $attributes['class'] .= ' form-control-sm';
+                if (strpos($attributes['class'], 'form-control-sm') === false) {
+                    $attributes['class'] .= ' form-control-sm';
+                }
             }
         }
 
@@ -595,17 +627,22 @@ class Filter
             $attributes['value'] = date('Y-m-d', strtotime($attributes['value']));
         }
 
-        $colWidth = 9;
-        if (empty($title)) {
-            $colWidth = 12;
+        if ($isForm) {
+            $colWidth = 9;
+            if (empty($title)) {
+                $colWidth = 12;
+            }
+            $str .= sprintf('<div class="col-md-%d">', $colWidth);
         }
-        $str .= sprintf('<div class="col-md-%d">', $colWidth);
+
         $str .= sprintf('<input %s />', Str::toAttribute($attributes));
         if ($newLine) {
             $str .= '<br /><br />';
         }
-        $str .= '</div>';
-        $str .= '</div>';
+        if ($isForm) {
+            $str .= '</div>';
+            $str .= '</div>';
+        }
 
         return $str;
     }

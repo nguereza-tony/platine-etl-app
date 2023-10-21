@@ -1,0 +1,47 @@
+{% extends "main" %}
+{% block body %}
+<div class="card mb-4">
+    <div class="card-header bg-white font-weight-bold page-header">
+        Importation des données ({{ total_items }})
+    </div>
+    
+    <div class="card-body">
+        {{ filters|raw }}
+        {% if list.size > 0 %}
+            <div class="table-responsive">
+                <table class="table table-hover table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Définition</th>
+                            <th>Description</th>
+                            <th>Total</th>
+                            <th>Importé</th>
+                            <th>Erreur</th>
+                            <th>Statut</th>
+                            <th>Date de création</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in list %}
+                            <tr>
+                                <td><a class="btn btn-xs btn-link" href="{% route_url data_definition_import_detail id:a.id %}">{{ a.definition.name }}</a></td>
+                                <td>{{ a.description }}</td>
+                                <td>{{ a.total|format }}</td>
+                                <td>{{ a.processed|format }}</td>
+                                <td>{{ a.error|format }}</td>
+                                <td>{{ status[a.status] }}</td>
+                                <td>{{ a.created_at|date:"d/m/Y H:i:s" }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center">
+                {{ pagination|raw }}
+            </div>
+        {% else %}
+            <p class="alert alert-info">Aucune donnée disponible à afficher</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}<!-- end block body -->

@@ -1,0 +1,88 @@
+{% extends "main" %}
+{% block body %}
+    <div class="card mb-4">
+        <div class="card-header bg-white font-weight-bold page-header">
+            Détail importation [{{ import.definition.name }}]
+        </div>
+        <div class="card-body">
+            <div class='row'>
+                <div class='col-md-6'>
+                    <div class='table-responsive'>
+                        <table class="detail table table-sm table-bordered">
+                            <tr>
+                                <td>ID</td>
+                                <td><b>{{ import.definition.id }}</b></td>
+                            </tr>
+                            <tr>
+                                <td>Nom</td>
+                                <td><b>{{ import.definition.name }}</b></td>
+                            </tr>
+                            <tr>
+                                <td>Description</td>
+                                <td><b>{{ import.definition.description }}</b></td>
+                            </tr>
+                            <tr>
+                                <td>Modèle (entité)</td>
+                                <td><b>{{ data_definition_repository[import.definition.model]|default:import.definition.model }}</b></td>
+                            </tr>
+                            <tr>
+                                <td>Source</td>
+                                <td><b>{{ data_definition_extractor[import.definition.extractor] }}</b></td>
+                            </tr>
+                            <tr>
+                                <td>Destination</td>
+                                <td><b>{{ data_definition_loader[import.definition.loader] }}</b></td>
+                            </tr>
+                            <tr>
+                                <td>Formattage</td>
+                                <td><b>{{ data_definition_transformer[import.definition.transformer] }}</b></td>
+                            </tr>
+                            <tr>
+                                <td>Contient les entêtes</td>
+                                <td><b>{{ status[import.definition.header] }}</b></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class='col-md-6'>
+                    <div class='table-responsive'>
+                        <table class="detail table table-sm table-bordered">
+                            <tr>
+                                <td>Statut</td>
+                                <td><b>{{ definition_import_status[import.status] }}</b></td>
+                            </tr>
+                            <tr>
+                                <td>Description</td>
+                                <td><b>{{ import.description }}</b></td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td><b>{{ import.total|format }}</b></td>
+                            </tr>
+                            <tr>
+                                <td>Importé</td>
+                                <td><b>{{ import.processed|format }}</b></td>
+                            </tr>
+                            <tr>
+                                <td>Erreur</td>
+                                <td><b>{{ import.error|format }}</b></td>
+                            </tr>
+                            <tr>
+                                <td>Fichier</td>
+                                <td><b>{{ import.file.real_name }} ({{ import.file.size|size_format }})</b></td>
+                            </tr>
+                            <tr>
+                                <td>Date de création</td>
+                                <td><b>{{ import.created_at|date:"d/m/Y H:i:s" }}</b></td>
+                            </tr>
+                            <tr>
+                                <td>Date de mise à jour</td>
+                                <td><b>{{ import.updated_at|date:"d/m/Y H:i:s" }}</b></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

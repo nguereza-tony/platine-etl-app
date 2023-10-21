@@ -50,14 +50,16 @@ namespace Platine\App\Provider;
 use Platine\App\Filter\UserFilter;
 use Platine\App\Helper\ActionHelper;
 use Platine\App\Helper\DataDefinitionHelper;
+use Platine\App\Helper\FileHelper;
 use Platine\App\Helper\Filter;
 use Platine\App\Helper\Sidebar;
 use Platine\App\Helper\StatusList;
 use Platine\App\Helper\ViewContext;
 use Platine\App\Http\Action\HomeAction;
 use Platine\App\Model\Repository\DataDefinitionFieldRepository;
+use Platine\App\Model\Repository\DataDefinitionImportRepository;
 use Platine\App\Model\Repository\DataDefinitionRepository;
-use Platine\Framework\Auth\Repository\UserRepository;
+use Platine\App\Model\Repository\FileRepository;
 use Platine\Framework\Helper\Flash;
 use Platine\Framework\Service\ServiceProvider;
 
@@ -77,11 +79,21 @@ class AppServiceProvider extends ServiceProvider
         /**
          * Repositories
          */
-        $this->app->bind(UserRepository::class);
+        $this->app->bind(FileRepository::class);
         $this->app->bind(DataDefinitionRepository::class);
         $this->app->bind(DataDefinitionFieldRepository::class);
+        $this->app->bind(DataDefinitionImportRepository::class);
 
+        /**
+         * Filters
+         */
         $this->app->bind(UserFilter::class);
+
+
+        /**
+         * Others
+         */
+        $this->app->bind(FileHelper::class);
         $this->app->bind(DataDefinitionHelper::class);
         $this->app->bind(ViewContext::class);
         $this->app->bind(Sidebar::class);

@@ -48,6 +48,7 @@ declare(strict_types=1);
 namespace Platine\App\Http\Action;
 
 use Platine\App\Helper\ActionHelper;
+use Platine\App\Helper\FileHelper;
 use Platine\App\Helper\Sidebar;
 use Platine\App\Helper\StatusList;
 use Platine\App\Helper\ViewContext;
@@ -218,6 +219,12 @@ abstract class BaseAction implements RequestHandlerInterface
     protected AppDatabaseConfig $dbConfig;
 
     /**
+     * The file helper instance
+     * @var FileHelper<T>
+     */
+    protected FileHelper $fileHelper;
+
+    /**
      * Create new instance
      * @param ActionHelper $actionHelper
      */
@@ -235,6 +242,7 @@ abstract class BaseAction implements RequestHandlerInterface
         $this->statusList = $actionHelper->getStatusList();
         $this->config = $actionHelper->getConfig();
         $this->dbConfig = $actionHelper->getDbConfig();
+        $this->fileHelper = $actionHelper->getFileHelper();
     }
 
     /**

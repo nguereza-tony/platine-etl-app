@@ -46,6 +46,22 @@
                                 </div>
                                 
                                 <div class="form-group row">
+                                    <label for="column" class="col-md-4 col-form-label">
+                                        Colonne:
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input 
+                                            type="text" 
+                                            name="column" 
+                                            value="{{ param.column }}" 
+                                            placeholder="Entrer la colonne (vide si même que attribut)"
+                                            class="form-control form-control-sm"
+                                        />
+                                        <span class="ferror">{{ errors.column }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
                                     <label for="position" class="col-md-4 col-form-label">
                                         Position: <span class="required">*</span>
                                     </label>

@@ -26,6 +26,12 @@ class DataDefinitionFieldParam extends AppParam
     protected string $name = '';
 
     /**
+    * The column field
+    * @var string
+    */
+    protected string $column = '';
+
+    /**
     * The position field
     * @var string
     */
@@ -52,12 +58,34 @@ class DataDefinitionFieldParam extends AppParam
     {
         $this->field = $entity->field;
         $this->name = $entity->name;
+        $this->column = (string) $entity->column;
         $this->position = (string) $entity->position;
         $this->defaultValue = (string) $entity->default_value;
         $this->parent = (string) $entity->parent_id;
 
         return $this;
     }
+
+    /**
+     *
+     * @return string
+     */
+    public function getColumn(): string
+    {
+        return $this->column;
+    }
+
+    /**
+     *
+     * @param string $column
+     * @return $this
+     */
+    public function setColumn(string $column): self
+    {
+        $this->column = $column;
+        return $this;
+    }
+
 
     /**
     * Return the field value

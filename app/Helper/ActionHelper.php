@@ -86,12 +86,18 @@ class ActionHelper
      */
     protected AppDatabaseConfig $dbConfig;
 
+    /**
+     * The file helper instance
+     * @var FileHelper<T>
+     */
+    protected FileHelper $fileHelper;
 
     /**
      * Create new instance
      * @param Pagination $pagination
      * @param Sidebar $sidebar
      * @param ViewContext<T> $context
+     * @param FileHelper<T> $fileHelper
      * @param Template $template
      * @param RouteHelper $routeHelper
      * @param Flash $flash
@@ -105,6 +111,7 @@ class ActionHelper
         Pagination $pagination,
         Sidebar $sidebar,
         ViewContext $context,
+        FileHelper $fileHelper,
         Template $template,
         RouteHelper $routeHelper,
         Flash $flash,
@@ -117,6 +124,7 @@ class ActionHelper
         $this->pagination = $pagination;
         $this->sidebar = $sidebar;
         $this->context = $context;
+        $this->fileHelper = $fileHelper;
         $this->template = $template;
         $this->routeHelper = $routeHelper;
         $this->flash = $flash;
@@ -126,6 +134,16 @@ class ActionHelper
         $this->config = $config;
         $this->dbConfig = $dbConfig;
     }
+
+    /**
+     *
+     * @return FileHelper
+     */
+    public function getFileHelper(): FileHelper
+    {
+        return $this->fileHelper;
+    }
+
 
     /**
      * Return the database configuration instance

@@ -57,6 +57,9 @@ use Platine\App\Http\Action\DataDefinition\Export\DataDefinitionExportProcessAct
 use Platine\App\Http\Action\DataDefinition\Field\DataDefinitionFieldCreateAction;
 use Platine\App\Http\Action\DataDefinition\Field\DataDefinitionFieldDeleteAction;
 use Platine\App\Http\Action\DataDefinition\Field\DataDefinitionFieldEditAction;
+use Platine\App\Http\Action\DataDefinition\Import\DataDefinitionImportCreateAction;
+use Platine\App\Http\Action\DataDefinition\Import\DataDefinitionImportDetailAction;
+use Platine\App\Http\Action\DataDefinition\Import\DataDefinitionImportListAction;
 use Platine\Framework\Service\ServiceProvider;
 use Platine\Route\Router;
 
@@ -81,6 +84,9 @@ class DataDefinitionServiceProvider extends ServiceProvider
         $this->app->bind(DataDefinitionFieldEditAction::class);
         $this->app->bind(DataDefinitionExportListAction::class);
         $this->app->bind(DataDefinitionExportProcessAction::class);
+        $this->app->bind(DataDefinitionImportListAction::class);
+        $this->app->bind(DataDefinitionImportCreateAction::class);
+        $this->app->bind(DataDefinitionImportDetailAction::class);
     }
 
     /**
@@ -94,9 +100,19 @@ class DataDefinitionServiceProvider extends ServiceProvider
             $router->get('/delete/{id}', DataDefinitionDeleteAction::class, 'data_definition_delete');
             $router->add('/create', DataDefinitionCreateAction::class, ['GET', 'POST'], 'data_definition_create');
             $router->add('/update/{id}', DataDefinitionEditAction::class, ['GET', 'POST'], 'data_definition_edit');
+
+            // Export
             $router->group('/export', function (Router $router) {
                 $router->get('', DataDefinitionExportListAction::class, 'data_definition_export_list');
                 $router->add('/process/{id}', DataDefinitionExportProcessAction::class, ['GET', 'POST'], 'data_definition_export_process');
+            });
+
+            // Import
+            $router->group('/import', function (Router $router) {
+                $router->get('', DataDefinitionImportListAction::class, 'data_definition_import_list');
+                $router->add('/create', DataDefinitionImportCreateAction::class, ['GET', 'POST'], 'data_definition_import_create');
+                $router->get('/detail/{id}', DataDefinitionImportDetailAction::class, 'data_definition_import_detail');
+                $router->get('/process/{id}', DataDefinitionExportProcessAction::class, 'data_definition_import_process');
             });
 
             $router->group('/fields', function (Router $router) {

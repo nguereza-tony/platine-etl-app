@@ -120,6 +120,11 @@ class DataDefinitionFieldEditAction extends BaseAction
             $defaultValue = null;
         }
 
+        $column = $formParam->getColumn();
+        if (empty($column)) {
+            $column = $formParam->getField();
+        }
+
         $parent = (int) $formParam->getParent();
         if ($parent <= 0) {
             $parent = null;
@@ -130,6 +135,7 @@ class DataDefinitionFieldEditAction extends BaseAction
         $dataDefinitionField->position = (int) $formParam->getPosition();
         $dataDefinitionField->default_value = $defaultValue;
         $dataDefinitionField->parent_id = $parent;
+        $dataDefinitionField->column = $column;
 
         try {
             $this->dataDefinitionFieldRepository->save($dataDefinitionField);

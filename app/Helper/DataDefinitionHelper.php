@@ -115,25 +115,24 @@ class DataDefinitionHelper
 
         $dataFields = [];
         $fieldNames = [];
+        $columns = [];
         $displayNames = [];
         foreach ($definitionFields as $row) {
-            $position = $row->position;
-            $default = $row->default_value;
-            $field = $row->field;
-            $displayName = $row->name;
-
-            $fieldNames[] = $field;
-            $displayNames[] = $displayName;
+            $columns[] = $row->column;
+            $fieldNames[] = $row->field;
+            $displayNames[] = $row->name;
 
             $dataFields[] = [
-              'field' => $field,
-              'display_name' => $displayName,
-              'position' => $position,
-              'default' => $default,
+              'field' => $row->field,
+              'column' => $row->column,
+              'display_name' => $row->name,
+              'position' => $row->position,
+              'default' => $row->default_value,
             ];
         }
         $dataFields['fields'] = $fieldNames;
         $dataFields['display_names'] = $displayNames;
+        $dataFields['columns'] = $columns;
 
         return $dataFields;
     }

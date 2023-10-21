@@ -44,6 +44,7 @@ class DataDefinitionFieldValidator extends AbstractValidator
     {
         $this->addData('field', $this->param->getField());
         $this->addData('name', $this->param->getName());
+        $this->addData('column', $this->param->getColumn());
         $this->addData('position', $this->param->getPosition());
         $this->addData('default_value', $this->param->getDefaultValue());
         $this->addData('parent', $this->param->getParent());
@@ -57,7 +58,6 @@ class DataDefinitionFieldValidator extends AbstractValidator
         $this->addRules('field', [
             new NotEmpty(),
             new MinLength(2),
-            new AlphaNumericDash(),
         ]);
 
         $this->addRules('name', [
@@ -72,6 +72,11 @@ class DataDefinitionFieldValidator extends AbstractValidator
 
         $this->addRules('default_value', [
             new MinLength(1),
+        ]);
+
+        $this->addRules('column', [
+            new MinLength(2),
+            new AlphaNumericDash(),
         ]);
 
         $this->addRules('parent', [

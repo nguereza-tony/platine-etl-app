@@ -25,6 +25,9 @@ class AddDataDefinitionFieldsTable20231017050049 extends AbstractMigration
                  ->description('The field display name')
                  ->notNull();
              
+             $table->string('column')
+                 ->description('The database column if any');
+             
              $table->integer('position')
                  ->description('The field position (sort order)')
                  ->defaultValue(1)
