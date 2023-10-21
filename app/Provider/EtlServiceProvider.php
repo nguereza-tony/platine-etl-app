@@ -49,14 +49,13 @@ namespace Platine\App\Provider;
 
 use Platine\App\Etl\Extractor\DbExtractor;
 use Platine\App\Etl\Extractor\RepositoryExtractor;
-use Platine\Config\Config;
+use Platine\App\Model\Entity\DataDefinition;
 use Platine\Container\ContainerInterface;
 use Platine\Database\QueryBuilder;
 use Platine\Etl\Etl;
 use Platine\Etl\Extractor\CsvExtractor;
 use Platine\Etl\Loader\CsvFileLoader;
 use Platine\Etl\Loader\JsonFileLoader;
-use Platine\Filesystem\Filesystem;
 use Platine\Framework\Service\ServiceProvider;
 
 /**
@@ -82,28 +81,45 @@ class EtlServiceProvider extends ServiceProvider
 
         $this->app->share('entity_transformer', function (ContainerInterface $app) {
             return function ($value, $key, Etl $etl, array $options = []) {
-                if (empty($value->updated_at)) {
-                    $value->updated_at = null;
+                $data = $value->jsonSerialize();
+                if (array_key_exists('updated_at', $data) && $value->updated_at !== null) {
+                    $data['updated_at'] = $value->updated_at->format('Y-m-d H:i:s');
                 }
 
-                yield $key => $value->jsonSerialize();
+                if (array_key_exists('created_at', $data) && $value->created_at !== null) {
+                    $data['created_at'] = $value->created_at->format('Y-m-d H:i:s');
+                }
+
+                yield $key => $data;
             };
         });
 
         $this->app->share('json_file_loader', function (ContainerInterface $app) {
-            $exportPath = $app->get(Config::class)->get('platform.data_export_path');
-            $exportDir = $app->get(Filesystem::class)->directory($exportPath);
-            $exportJsonPath = $exportDir->getPath() . DIRECTORY_SEPARATOR . 'export.json';
-
-            return new JsonFileLoader($exportJsonPath, JSON_PRETTY_PRINT);
+            return function (
+                DataDefinition $definition,
+                array $dataFields,
+                string $path,
+                array $filters = []
+            ) use ($app) {
+                return new JsonFileLoader($path, JSON_PRETTY_PRINT);
+            };
         });
 
         $this->app->share('csv_file_loader', function (ContainerInterface $app) {
-            $exportPath = $app->get(Config::class)->get('platform.data_export_path');
-            $exportDir = $app->get(Filesystem::class)->directory($exportPath);
-            $exportCsvPath = $exportDir->getPath() . DIRECTORY_SEPARATOR . 'export.csv';
-
-            return new CsvFileLoader($exportCsvPath);
+            return function (
+                DataDefinition $definition,
+                array $dataFields,
+                string $path,
+                array $filters = []
+            ) use ($app) {
+                return new CsvFileLoader(
+                    $path,
+                    $dataFields['display_names'] ?? [],
+                    $definition->field_separator ?? ',',
+                    $definition->text_delimiter ?? '"',
+                    $definition->escape_char ?? '\\'
+                );
+            };
         });
 
         $this->app->share('csv_file_extractor', function (ContainerInterface $app) {
@@ -118,7 +134,14 @@ class EtlServiceProvider extends ServiceProvider
         });
 
         $this->app->share('repository_extractor', function (ContainerInterface $app) {
-            return new RepositoryExtractor($app);
+            return function (
+                DataDefinition $definition,
+                array $dataFields,
+                string $path,
+                array $filters = []
+            ) use ($app) {
+                return new RepositoryExtractor($app, $definition, $dataFields, $filters);
+            };
         });
     }
 }

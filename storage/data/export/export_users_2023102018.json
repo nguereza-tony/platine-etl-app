@@ -1,0 +1,83 @@
+[
+    {
+        "lastname": "NGUEREZA",
+        "firstname": "Tony",
+        "username": "tnh@gmail.com",
+        "email": "tnh@gmail.com",
+        "status": "A",
+        "created_at": "2023-10-16 19:48:24",
+        "updated_at": "2023-10-16 19:49:14"
+    },
+    {
+        "lastname": "MBOUTOU",
+        "firstname": "Ingrid",
+        "username": "mboutouthecle@gmail.com",
+        "email": "mboutouthecle@gmail.com",
+        "status": "A",
+        "created_at": "2023-10-16 19:48:24",
+        "updated_at": "2023-10-16 19:49:14"
+    },
+    {
+        "lastname": "NGUEREZA",
+        "firstname": "Ethan",
+        "username": "ethan.nguereza@gmail.com",
+        "email": "ethan.nguereza@gmail.com",
+        "status": "A",
+        "created_at": "2023-10-16 19:48:24",
+        "updated_at": "2023-10-16 19:49:14"
+    },
+    {
+        "lastname": "DOE",
+        "firstname": "John",
+        "username": "john.doe@yahoo.fr",
+        "email": "john.doe@yahoo.fr",
+        "status": "A",
+        "created_at": "2023-10-16 19:48:24",
+        "updated_at": "2023-10-16 19:49:14"
+    },
+    {
+        "lastname": "POUTINE",
+        "firstname": "Vladimir",
+        "username": "dg@cnss-rca.org",
+        "email": "dg@cnss-rca.org",
+        "status": "A",
+        "created_at": "2023-10-16 19:48:24",
+        "updated_at": "2023-10-16 19:49:14"
+    },
+    {
+        "lastname": "GUEPE",
+        "firstname": "Veronique",
+        "username": "finance@cnss.org",
+        "email": "finance@cnss.org",
+        "status": "A",
+        "created_at": "2023-10-16 19:48:24",
+        "updated_at": "2023-10-16 19:49:14"
+    },
+    {
+        "lastname": "HUTTON",
+        "firstname": "Timothy",
+        "username": "t.hutton@cnss-rca.org",
+        "email": "t.hutton@cnss-rca.org",
+        "status": "A",
+        "created_at": "2023-10-16 19:48:25",
+        "updated_at": "2023-10-16 19:49:14"
+    },
+    {
+        "lastname": "POMERLEAU",
+        "firstname": "Huon",
+        "username": "HuonPomerleau@rhyta.com",
+        "email": "HuonPomerleau@rhyta.com",
+        "status": "A",
+        "created_at": "2023-10-16 19:48:25",
+        "updated_at": "2023-10-16 19:49:14"
+    },
+    {
+        "lastname": "WADE",
+        "firstname": "Wesley",
+        "username": "WesleyRWade@rhyta.com",
+        "email": "WesleyRWade@rhyta.com",
+        "status": "A",
+        "created_at": "2023-10-16 19:48:25",
+        "updated_at": null
+    }
+]

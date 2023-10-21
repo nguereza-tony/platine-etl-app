@@ -1,0 +1,29 @@
+{% extends "main" %}
+{% block body %}
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-white font-weight-bold">
+                    Exportation des données [{{ definition.name }}]
+                </div>
+                <div class="card-body">
+                    <form action="" method="post">
+                        {% csrf %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                {{ filters|raw }}
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="offset-1 col pr-2">
+                                <button type="submit" class="btn btn-primary">Valider</button>
+                                <a href="{% route_url data_definition_export_list %}" class="btn btn-dark">Annuler</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

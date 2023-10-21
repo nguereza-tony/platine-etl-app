@@ -2,7 +2,7 @@
 {% block body %}
 <div class="card mb-4">
     <div class="card-header bg-white font-weight-bold page-header">
-        Définitions des données ({{ total_items }})
+        Exportation des données ({{ total_items }})
     </div>
     
     <div class="card-body">
@@ -14,21 +14,27 @@
                         <tr>
                             <th>Nom</th>
                             <th>Description</th>
-                            <th>Direction</th>
-                            <th>Actif</th>
-                            <th>Date de création</th>
-                            <th>Date de mise à jour</th>
+                            <th>Modèle (entité)</th>
+                            <th>Source</th>
+                            <th>Destination</th>
+                            <th>Formattage</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for a in list %}
                             <tr>
-                                <td><a class="btn btn-xs btn-link" href="{% route_url data_definition_detail id:a.id %}">{{ a.name }}</a></td>
+                                <td>{{ a.name }}</td>
                                 <td>{{ a.description }}</td>
-                                <td>{{ direction[a.direction] }}</td>
-                                <td>{{ status[a.status] }}</td>
-                                <td>{{ a.created_at|date:"d/m/Y H:i:s" }}</td>
-                                <td>{{ a.updated_at|date:"d/m/Y H:i:s" }}</td>
+                                <td>{{ data_definition_repository[a.model] }}</td>
+                                <td>{{ data_definition_extractor[a.extractor] }}</td>
+                                <td>{{ data_definition_loader[a.loader] }}</td>
+                                <td>{{ data_definition_transformer[a.transformer] }}</td>
+                                <td  class="actions">
+                                    <a href="{% route_url data_definition_export_process id:a.id %}" class="btn btn-xs btn-icon btn-pill btn-dark">
+                                        <i class="fa fa-fw fa-download"></i>
+                                    </a>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>

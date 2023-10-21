@@ -177,36 +177,4 @@ class HomeAction extends BaseAction
 
         return $this->viewResponse();
     }
-
-
-    protected function getDefinitionFields(int $definitionId): array
-    {
-        $definitionFields = $this->dataDefinitionFieldRepository->filters(['definition' => $definitionId])
-                                                                ->orderBy('position')
-                                                                ->all();
-
-        $dataFields = [];
-        $fieldNames = [];
-        $displayNames = [];
-        foreach ($definitionFields as $row) {
-            $position = $row->position;
-            $default = $row->default_value;
-            $field = $row->field;
-            $displayName = $row->name;
-
-            $fieldNames[] = $field;
-            $displayNames[] = $displayName;
-
-            $dataFields[] = [
-              'field' => $field,
-              'display_name' => $displayName,
-              'position' => $position,
-              'default' => $default,
-            ];
-        }
-        $dataFields['fields'] = $fieldNames;
-        $dataFields['display_names'] = $displayNames;
-
-        return $dataFields;
-    }
 }

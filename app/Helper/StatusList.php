@@ -6,6 +6,7 @@ namespace Platine\App\Helper;
 
 use Platine\App\Enum\DataDefinitionDirection;
 use Platine\App\Enum\YesNoStatus;
+use Platine\App\Filter\UserFilter;
 use Platine\App\Model\Repository\DataDefinitionFieldRepository;
 use Platine\Framework\Auth\Repository\UserRepository;
 use Platine\Lang\Lang;
@@ -65,6 +66,17 @@ class StatusList
         return [
             UserRepository::class => $this->lang->tr('Utilisateurs'),
             DataDefinitionFieldRepository::class => $this->lang->tr('Définitions des données'),
+        ];
+    }
+
+    /**
+     *
+     * @return array<string, mixed>
+     */
+    public function getDataDefinitionFilter(): array
+    {
+        return [
+            UserFilter::class => $this->lang->tr('Utilisateurs'),
         ];
     }
 

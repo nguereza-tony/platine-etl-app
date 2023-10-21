@@ -6,6 +6,7 @@ namespace Platine\App\Model\Entity;
 
 use Platine\Orm\Entity;
 use Platine\Orm\Mapper\EntityMapperInterface;
+use Platine\Orm\Query\Query;
 
 /**
 * @class DataDefinition
@@ -28,6 +29,14 @@ class DataDefinition extends Entity
 
          $mapper->filter('direction', function (Query $q, $value) {
              $q->where('direction')->is($value);
+         });
+
+         $mapper->filter('status', function (Query $q, $value) {
+             $q->where('status')->is($value);
+         });
+
+         $mapper->filter('header', function (Query $q, $value) {
+             $q->where('header')->is($value);
          });
     }
 }

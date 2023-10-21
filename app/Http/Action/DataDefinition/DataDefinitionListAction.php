@@ -74,6 +74,7 @@ class DataDefinitionListAction extends BaseAction
 
 
         $this->addSidebar('', 'Nouvelle définition', 'data_definition_create');
+        $this->addSidebar('', 'Exporter les données', 'data_definition_export_list');
 
         return $this->viewResponse();
     }

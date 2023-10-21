@@ -85,6 +85,18 @@ class DataDefinitionParam extends AppParam
     */
     protected string $header = '';
 
+    /**
+    * The extension field
+    * @var string
+    */
+    protected string $extension = '';
+
+    /**
+    * The filter field
+    * @var string
+    */
+    protected string $filter = '';
+
 
     /**
     * @param TEntity $entity
@@ -93,6 +105,8 @@ class DataDefinitionParam extends AppParam
     public function fromEntity(Entity $entity): self
     {
         $this->name = $entity->name;
+        $this->extension = (string) $entity->extension;
+        $this->filter = (string) $entity->filter;
         $this->header = $entity->header;
         $this->status = $entity->status;
         $this->description = (string) $entity->description;
@@ -107,6 +121,48 @@ class DataDefinitionParam extends AppParam
 
         return $this;
     }
+
+    /**
+     *
+     * @return string
+     */
+    public function getFilter(): string
+    {
+        return $this->filter;
+    }
+
+    /**
+     *
+     * @param string $filter
+     * @return $this
+     */
+    public function setFilter(string $filter): self
+    {
+        $this->filter = $filter;
+        return $this;
+    }
+
+
+    /**
+     *
+     * @return string
+     */
+    public function getExtension(): string
+    {
+        return $this->extension;
+    }
+
+    /**
+     *
+     * @param string $extension
+     * @return $this
+     */
+    public function setExtension(string $extension): self
+    {
+        $this->extension = $extension;
+        return $this;
+    }
+
 
     /**
      *
@@ -218,7 +274,8 @@ class DataDefinitionParam extends AppParam
     */
     public function getFieldSeparator(): string
     {
-        return $this->fieldSeparator;
+        // TODO can have some char that is escaped
+        return html_entity_decode($this->fieldSeparator);
     }
 
    /**
@@ -227,7 +284,7 @@ class DataDefinitionParam extends AppParam
     */
     public function getTextDelimiter(): string
     {
-        return $this->textDelimiter;
+        return html_entity_decode($this->textDelimiter);
     }
 
    /**
@@ -236,7 +293,7 @@ class DataDefinitionParam extends AppParam
     */
     public function getEscapeChar(): string
     {
-        return $this->escapeChar;
+        return html_entity_decode($this->escapeChar);
     }
 
 

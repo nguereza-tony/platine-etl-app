@@ -41,6 +41,10 @@
                                 <td>Formattage</td>
                                 <td><b>{{ data_definition_transformer[definition.transformer] }}</b></td>
                             </tr>
+                            <tr>
+                                <td>Filtre</td>
+                                <td><b>{{ data_definition_filter[definition.filter] }}</b></td>
+                            </tr>
                         </table>
                     </div>
                 </div>
@@ -62,6 +66,10 @@
                             <tr>
                                 <td>Caractère d'échappement</td>
                                 <td><b>{{ definition.escape_char|raw  }}</b></td>
+                            </tr>
+                            <tr>
+                                <td>Extension du fichier</td>
+                                <td><b>{{ definition.extension  }}</b></td>
                             </tr>
                             <tr>
                                 <td>Actif</td>

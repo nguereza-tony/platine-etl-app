@@ -318,6 +318,31 @@ class Filter
     }
 
     /**
+     * Render filter for form
+     * @return string
+     */
+    public function form(): string
+    {
+        if (empty($this->fields)) {
+            return '';
+        }
+
+        $attributeStr = '';
+        if (count($this->attributes) > 0) {
+            $attributeStr = Str::toAttribute($this->attributes);
+        }
+
+        $str = '';
+        foreach ($this->fields as $field => $data) {
+            $renderMethodName = 'render' . $data['type'];
+            $render = $this->{$renderMethodName}($field, true);
+            $str .= $render;
+        }
+
+        return $str;
+    }
+
+    /**
      * Add common field
      * @param string $field
      * @param string $title
@@ -375,11 +400,12 @@ class Filter
     /**
      * Render for text field
      * @param string $field
+     * @param bool $isForm
      * @return string
      */
-    protected function renderT(string $field): string
+    protected function renderT(string $field, bool $isForm = false): string
     {
-        return $this->renderTextField($field, 'text');
+        return $this->renderTextField($field, 'text', $isForm);
     }
 
     /**
@@ -387,9 +413,9 @@ class Filter
      * @param string $field
      * @return string
      */
-    protected function renderH(string $field): string
+    protected function renderH(string $field, bool $isForm = false): string
     {
-        return $this->renderTextField($field, 'hidden');
+        return $this->renderTextField($field, 'hidden', $isForm);
     }
 
     /**
@@ -397,7 +423,7 @@ class Filter
      * @param string $field
      * @return string
      */
-    protected function renderS(string $field): string
+    protected function renderS(string $field, bool $isForm = false): string
     {
         $data = $this->fields[$field] ?? [];
         $values = $data['values'] ?? [];
@@ -405,11 +431,15 @@ class Filter
             return '';
         }
 
-        $str = '';
+        $str = '<div class="form-group row">';
         $title = $data['title'] ?? '';
         $label = str_replace(['[', ']'], '', $field);
         if (!empty($title)) {
-            $str .= sprintf('<label for="%s">%s:</label> &nbsp;&nbsp;', $label, $title);
+            $str .= <<<E
+                <label for="$label" class="col-md-3 col-form-label">
+                    $title:
+                </label>
+            E;
         }
         $extras = $data['extras'];
         $default = $data['value'];
@@ -428,11 +458,30 @@ class Filter
         if (isset($attributes['required']) && !$attributes['required']) {
             unset($attributes['required']);
         }
+
+        if (!isset($attributes['class'])) {
+            $attributes['class'] = 'form-control form-control-sm';
+        } else {
+            if (strpos($attributes['class'], 'form-control') === false) {
+                $attributes['class'] .= ' form-control';
+            }
+
+            if (strpos($attributes['class'], 'form-control-sm') === false) {
+                $attributes['class'] .= ' form-control-sm';
+            }
+        }
+
         $normalizedField = str_replace(['[', ']'], '', $field);
         $value = $this->params[$normalizedField] ?? $default;
         if (!is_array($value)) {
             $value = (string) $value;
         }
+
+        $colWidth = 9;
+        if (empty($title)) {
+            $colWidth = 12;
+        }
+        $str .= sprintf('<div class="col-md-%d">', $colWidth);
         $str .= sprintf('<select %s>', Str::toAttribute($attributes));
         if (!isset($attributes['required'])) {
             $str .= sprintf('<option value="">%s</option>', '-- Tout --');
@@ -450,10 +499,12 @@ class Filter
             $str .= sprintf('<option value="%s" %s>%s</option>', $key, $selected ? 'selected' : '', $option);
         }
         $str .= '</select>';
+        $str .= '</div>';
 
         if ($newLine) {
             $str .= '<br /><br />';
         }
+        $str .= '</div>';
 
         return $str;
     }
@@ -463,7 +514,7 @@ class Filter
      * @param string $field
      * @return string
      */
-    protected function renderR(string $field): string
+    protected function renderR(string $field, bool $isForm = false): string
     {
         return '';
     }
@@ -473,7 +524,7 @@ class Filter
      * @param string $field
      * @return string
      */
-    protected function renderC(string $field): string
+    protected function renderC(string $field, bool $isForm = false): string
     {
         return '';
     }
@@ -483,9 +534,9 @@ class Filter
      * @param string $field
      * @return string
      */
-    protected function renderD(string $field): string
+    protected function renderD(string $field, bool $isForm = false): string
     {
-        return $this->renderTextField($field, 'date');
+        return $this->renderTextField($field, 'date', $isForm);
     }
 
     /**
@@ -494,18 +545,23 @@ class Filter
      * @param string $type
      * @return string
      */
-    protected function renderTextField(string $field, string $type): string
+    protected function renderTextField(string $field, string $type, bool $isForm = false): string
     {
         $data = $this->fields[$field] ?? [];
         if (empty($data)) {
             return '';
         }
-        $str = '';
+        $str = '<div class="form-group row">';
         $title = $data['title'] ?? '';
         $label = str_replace(['[', ']'], '', $field);
         if (!empty($title)) {
-            $str .= sprintf('<label for="%s">%s: &nbsp;</label>', $label, $title);
+            $str .= <<<E
+                <label for="$label" class="col-md-3 col-form-label">
+                    $title:
+                </label>
+            E;
         }
+
         $extras = $data['extras'];
         $newLine = $extras['new_line'] ?? false;
         $attributes = $extras;
@@ -520,6 +576,18 @@ class Filter
             unset($attributes['required']);
         }
 
+        if (!isset($attributes['class'])) {
+            $attributes['class'] = 'form-control form-control-sm';
+        } else {
+            if (strpos($attributes['class'], 'form-control') === false) {
+                $attributes['class'] .= ' form-control';
+            }
+
+            if (strpos($attributes['class'], 'form-control-sm') === false) {
+                $attributes['class'] .= ' form-control-sm';
+            }
+        }
+
         $value = $this->params[$field] ?? $default;
         $attributes['value'] = $value;
 
@@ -527,10 +595,17 @@ class Filter
             $attributes['value'] = date('Y-m-d', strtotime($attributes['value']));
         }
 
+        $colWidth = 9;
+        if (empty($title)) {
+            $colWidth = 12;
+        }
+        $str .= sprintf('<div class="col-md-%d">', $colWidth);
         $str .= sprintf('<input %s />', Str::toAttribute($attributes));
         if ($newLine) {
             $str .= '<br /><br />';
         }
+        $str .= '</div>';
+        $str .= '</div>';
 
         return $str;
     }

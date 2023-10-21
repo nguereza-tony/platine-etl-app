@@ -47,7 +47,9 @@ declare(strict_types=1);
 
 namespace Platine\App\Provider;
 
+use Platine\App\Filter\UserFilter;
 use Platine\App\Helper\ActionHelper;
+use Platine\App\Helper\DataDefinitionHelper;
 use Platine\App\Helper\Filter;
 use Platine\App\Helper\Sidebar;
 use Platine\App\Helper\StatusList;
@@ -79,6 +81,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(DataDefinitionRepository::class);
         $this->app->bind(DataDefinitionFieldRepository::class);
 
+        $this->app->bind(UserFilter::class);
+        $this->app->bind(DataDefinitionHelper::class);
         $this->app->bind(ViewContext::class);
         $this->app->bind(Sidebar::class);
         $this->app->share(ActionHelper::class);

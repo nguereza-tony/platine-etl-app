@@ -33,6 +33,9 @@ class AddDataDefinitionsTable20231017050035 extends AbstractMigration
             $table->string('transformer')
                  ->description('The transformer to use');
             
+            $table->string('filter')
+                 ->description('The filter to use');
+            
             $table->string('loader')
                  ->description('The loader to use')
                  ->notNull();
@@ -59,6 +62,9 @@ class AddDataDefinitionsTable20231017050035 extends AbstractMigration
             
             $table->string('escape_char')
                  ->description('Used for CSV, etc.');
+            
+            $table->string('extension')
+                 ->description('File import/export extension');
             
             $table->timestamps();
 

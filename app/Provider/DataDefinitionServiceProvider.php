@@ -52,6 +52,8 @@ use Platine\App\Http\Action\DataDefinition\DataDefinitionDeleteAction;
 use Platine\App\Http\Action\DataDefinition\DataDefinitionDetailAction;
 use Platine\App\Http\Action\DataDefinition\DataDefinitionEditAction;
 use Platine\App\Http\Action\DataDefinition\DataDefinitionListAction;
+use Platine\App\Http\Action\DataDefinition\Export\DataDefinitionExportListAction;
+use Platine\App\Http\Action\DataDefinition\Export\DataDefinitionExportProcessAction;
 use Platine\App\Http\Action\DataDefinition\Field\DataDefinitionFieldCreateAction;
 use Platine\App\Http\Action\DataDefinition\Field\DataDefinitionFieldDeleteAction;
 use Platine\App\Http\Action\DataDefinition\Field\DataDefinitionFieldEditAction;
@@ -77,6 +79,8 @@ class DataDefinitionServiceProvider extends ServiceProvider
         $this->app->bind(DataDefinitionFieldCreateAction::class);
         $this->app->bind(DataDefinitionFieldDeleteAction::class);
         $this->app->bind(DataDefinitionFieldEditAction::class);
+        $this->app->bind(DataDefinitionExportListAction::class);
+        $this->app->bind(DataDefinitionExportProcessAction::class);
     }
 
     /**
@@ -90,6 +94,10 @@ class DataDefinitionServiceProvider extends ServiceProvider
             $router->get('/delete/{id}', DataDefinitionDeleteAction::class, 'data_definition_delete');
             $router->add('/create', DataDefinitionCreateAction::class, ['GET', 'POST'], 'data_definition_create');
             $router->add('/update/{id}', DataDefinitionEditAction::class, ['GET', 'POST'], 'data_definition_edit');
+            $router->group('/export', function (Router $router) {
+                $router->get('', DataDefinitionExportListAction::class, 'data_definition_export_list');
+                $router->add('/process/{id}', DataDefinitionExportProcessAction::class, ['GET', 'POST'], 'data_definition_export_process');
+            });
 
             $router->group('/fields', function (Router $router) {
                 $router->add('/create/{id}', DataDefinitionFieldCreateAction::class, ['GET', 'POST'], 'data_definition_field_create');

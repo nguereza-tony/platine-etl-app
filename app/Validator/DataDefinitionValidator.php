@@ -53,12 +53,14 @@ class DataDefinitionValidator extends AbstractValidator
     {
         $this->addData('name', $this->param->getName());
         $this->addData('status', $this->param->getStatus());
+        $this->addData('extension', $this->param->getExtension());
         $this->addData('header', $this->param->getHeader());
         $this->addData('description', $this->param->getDescription());
         $this->addData('model', $this->param->getModel());
         $this->addData('extractor', $this->param->getExtractor());
         $this->addData('transformer', $this->param->getTransformer());
         $this->addData('loader', $this->param->getLoader());
+        $this->addData('filter', $this->param->getFilter());
         $this->addData('direction', $this->param->getDirection());
         $this->addData('field_separator', $this->param->getFieldSeparator());
         $this->addData('text_delimiter', $this->param->getTextDelimiter());
@@ -93,6 +95,11 @@ class DataDefinitionValidator extends AbstractValidator
             new InList(array_keys($this->statusList->getDataDefinitionTransformer())),
         ]);
 
+        $this->addRules('filter', [
+            new MinLength(2),
+            new InList(array_keys($this->statusList->getDataDefinitionFilter())),
+        ]);
+
         $this->addRules('loader', [
             new NotEmpty(),
             new InList(array_keys($this->statusList->getDataDefinitionLoader())),
@@ -112,6 +119,10 @@ class DataDefinitionValidator extends AbstractValidator
                 YesNoStatus::YES,
                 YesNoStatus::NO,
             ]),
+        ]);
+
+        $this->addRules('extension', [
+            new NotEmpty(),
         ]);
 
         $this->addRules('field_separator', [

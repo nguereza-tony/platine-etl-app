@@ -63,6 +63,7 @@ class DataDefinitionCreateAction extends BaseAction
         $this->addContext('data_definition_loader', $this->statusList->getDataDefinitionLoader());
         $this->addContext('data_definition_extractor', $this->statusList->getDataDefinitionExtractor());
         $this->addContext('data_definition_transformer', $this->statusList->getDataDefinitionTransformer());
+        $this->addContext('data_definition_filter', $this->statusList->getDataDefinitionFilter());
         $this->addContext('status', $this->statusList->getYesNoStatus());
 
         if ($request->getMethod() === 'GET') {
@@ -109,6 +110,11 @@ class DataDefinitionCreateAction extends BaseAction
             $transformer = null;
         }
 
+        $filter = $formParam->getFilter();
+        if (empty($filter)) {
+            $filter = null;
+        }
+
         $fieldSeparator = $formParam->getFieldSeparator();
         if (empty($fieldSeparator)) {
             $fieldSeparator = null;
@@ -131,12 +137,14 @@ class DataDefinitionCreateAction extends BaseAction
             'loader' => $formParam->getLoader(),
             'description' => $description,
             'transformer' => $transformer,
+            'filter' => $filter,
             'direction' => $direction,
             'field_separator' => $fieldSeparator,
             'text_delimiter' => $textDelimiter,
             'escape_char' => $escapeChar,
             'status' => $formParam->getStatus(),
             'header' => $formParam->getHeader(),
+            'extension' => $formParam->getExtension(),
         ]);
 
         try {

@@ -74,6 +74,7 @@ class DataDefinitionEditAction extends BaseAction
         $this->addContext('data_definition_loader', $this->statusList->getDataDefinitionLoader());
         $this->addContext('data_definition_extractor', $this->statusList->getDataDefinitionExtractor());
         $this->addContext('data_definition_transformer', $this->statusList->getDataDefinitionTransformer());
+        $this->addContext('data_definition_filter', $this->statusList->getDataDefinitionFilter());
         $this->addContext('status', $this->statusList->getYesNoStatus());
 
         if ($request->getMethod() === 'GET') {
@@ -115,6 +116,11 @@ class DataDefinitionEditAction extends BaseAction
             $transformer = null;
         }
 
+        $filter = $formParam->getFilter();
+        if (empty($filter)) {
+            $filter = null;
+        }
+
         $fieldSeparator = $formParam->getFieldSeparator();
         if (empty($fieldSeparator)) {
             $fieldSeparator = null;
@@ -135,12 +141,14 @@ class DataDefinitionEditAction extends BaseAction
         $dataDefinition->loader = $formParam->getLoader();
         $dataDefinition->description = $description;
         $dataDefinition->transformer = $transformer;
+        $dataDefinition->filter = $filter;
         $dataDefinition->direction = $direction;
         $dataDefinition->field_separator = $fieldSeparator;
         $dataDefinition->text_delimiter = $textDelimiter;
         $dataDefinition->escape_char = $escapeChar;
         $dataDefinition->status = $formParam->getStatus();
         $dataDefinition->header = $formParam->getHeader();
+        $dataDefinition->extension = $formParam->getExtension();
 
         try {
             $this->dataDefinitionRepository->save($dataDefinition);

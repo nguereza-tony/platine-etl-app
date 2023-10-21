@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Platine\App\Http\Action\DataDefinition;
 
+use Platine\App\Enum\DataDefinitionDirection;
+use Platine\App\Enum\YesNoStatus;
 use Platine\App\Helper\ActionHelper;
 use Platine\App\Http\Action\BaseAction;
 use Platine\App\Model\Entity\DataDefinition;
@@ -78,7 +80,8 @@ class DataDefinitionDetailAction extends BaseAction
         $this->addContext('data_definition_loader', $this->statusList->getDataDefinitionLoader());
         $this->addContext('data_definition_extractor', $this->statusList->getDataDefinitionExtractor());
         $this->addContext('data_definition_transformer', $this->statusList->getDataDefinitionTransformer());
-         $this->addContext('status', $this->statusList->getYesNoStatus());
+        $this->addContext('data_definition_filter', $this->statusList->getDataDefinitionFilter());
+        $this->addContext('status', $this->statusList->getYesNoStatus());
 
         $definitionFields = $this->dataDefinitionFieldRepository->filters(['definition' => $id])
                                                                 ->with(['parent'])
@@ -94,6 +97,9 @@ class DataDefinitionDetailAction extends BaseAction
         $this->addSidebar('', 'Ajouter un attribut', 'data_definition_field_create', ['id' => $id]);
         if (count($definitionFields) === 0) {
             $this->addSidebar('', 'Supprimer', 'data_definition_delete', ['id' => $id], ['confirm' => true]);
+        }
+        if ($dataDefinition->direction === DataDefinitionDirection::OUT && $dataDefinition->status === YesNoStatus::YES) {
+            $this->addSidebar('', 'Exporter les données', 'data_definition_export_process', ['id' => $id]);
         }
 
         return $this->viewResponse();
