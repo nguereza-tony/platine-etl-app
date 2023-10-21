@@ -14,6 +14,7 @@ use Platine\Framework\Service\Provider\LangServiceProvider;
 use Platine\Framework\Service\Provider\LoggerServiceProvider;
 use Platine\Framework\Service\Provider\MigrationServiceProvider;
 use Platine\Framework\Service\Provider\PaginationServiceProvider;
+use Platine\Framework\Service\Provider\PDFServiceProvider;
 use Platine\Framework\Service\Provider\RoutingServiceProvider;
 use Platine\Framework\Service\Provider\SecurityServiceProvider;
 use Platine\Framework\Service\Provider\SessionServiceProvider;
@@ -46,4 +47,5 @@ use Platine\Framework\Service\Provider\TemplateServiceProvider;
         AppServiceProvider::class,
         EtlServiceProvider::class,
         DataDefinitionServiceProvider::class,
+        PDFServiceProvider::class,
     ];

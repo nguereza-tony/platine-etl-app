@@ -7,7 +7,7 @@ namespace Platine\App\Helper;
 use Platine\App\Enum\DataDefinitionDirection;
 use Platine\App\Enum\YesNoStatus;
 use Platine\App\Filter\UserFilter;
-use Platine\App\Model\Repository\DataDefinitionFieldRepository;
+use Platine\App\Model\Repository\DataDefinitionRepository;
 use Platine\Framework\Auth\Repository\UserRepository;
 use Platine\Lang\Lang;
 
@@ -65,7 +65,7 @@ class StatusList
     {
         return [
             UserRepository::class => $this->lang->tr('Utilisateurs'),
-            DataDefinitionFieldRepository::class => $this->lang->tr('Définitions des données'),
+            DataDefinitionRepository::class => $this->lang->tr('Définitions des données'),
         ];
     }
 
@@ -89,6 +89,7 @@ class StatusList
         return [
             'json_file_loader' => $this->lang->tr('Fichier (JSON)'),
             'csv_file_loader' => $this->lang->tr('Fichier (CSV)'),
+            'pdf_file_loader' => $this->lang->tr('Fichier (PDF)'),
         ];
     }
 

@@ -49,6 +49,7 @@ namespace Platine\App\Provider;
 
 use Platine\App\Etl\Extractor\DbExtractor;
 use Platine\App\Etl\Extractor\RepositoryExtractor;
+use Platine\App\Etl\Loader\PdfLoader;
 use Platine\App\Model\Entity\DataDefinition;
 use Platine\Container\ContainerInterface;
 use Platine\Database\QueryBuilder;
@@ -57,6 +58,8 @@ use Platine\Etl\Extractor\CsvExtractor;
 use Platine\Etl\Loader\CsvFileLoader;
 use Platine\Etl\Loader\JsonFileLoader;
 use Platine\Framework\Service\ServiceProvider;
+use Platine\PDF\PDF;
+use Platine\Template\Template;
 
 /**
  * @class EtlServiceProvider
@@ -118,6 +121,24 @@ class EtlServiceProvider extends ServiceProvider
                     $definition->field_separator ?? ',',
                     $definition->text_delimiter ?? '"',
                     $definition->escape_char ?? '\\'
+                );
+            };
+        });
+
+        $this->app->share('pdf_file_loader', function (ContainerInterface $app) {
+            return function (
+                DataDefinition $definition,
+                array $dataFields,
+                string $path,
+                array $filters = []
+            ) use ($app) {
+                return new PdfLoader(
+                    $app->get(PDF::class),
+                    $definition,
+                    $app->get(Template::class),
+                    $path,
+                    $dataFields,
+                    $filters
                 );
             };
         });

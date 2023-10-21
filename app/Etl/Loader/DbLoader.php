@@ -35,7 +35,7 @@ class DbLoader implements LoaderInterface
         }
     }
 
-    public function init(): void
+    public function init(array $options = []): void
     {
         $this->queryBuilder->getConnection()->startTransaction();
     }

@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Import Users",
+        "description": null,
+        "status": "Y",
+        "field_separator": ","
+    },
+    {
+        "name": "Export Users",
+        "description": null,
+        "status": "Y",
+        "field_separator": ","
+    },
+    {
+        "name": "Export Data Definition",
+        "description": null,
+        "status": "Y",
+        "field_separator": ","
+    }
+]

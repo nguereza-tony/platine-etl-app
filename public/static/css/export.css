@@ -62,6 +62,10 @@
     text-align: right;
   }
   
+  .center{
+    text-align: center;
+  }
+  
   .header, .footer{
     width: 100%;
     text-align: center;
