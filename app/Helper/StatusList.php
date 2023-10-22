@@ -9,6 +9,7 @@ use Platine\App\Enum\DataDefinitionImportStatus;
 use Platine\App\Enum\YesNoStatus;
 use Platine\App\Filter\UserFilter;
 use Platine\App\Model\Repository\DataDefinitionRepository;
+use Platine\App\Model\Repository\DemoRepository;
 use Platine\Framework\Auth\Repository\UserRepository;
 use Platine\Lang\Lang;
 
@@ -79,6 +80,7 @@ class StatusList
     public function getDataDefinitionRepository(): array
     {
         return [
+            DemoRepository::class => $this->lang->tr('Demo'),
             UserRepository::class => $this->lang->tr('Utilisateurs'),
             DataDefinitionRepository::class => $this->lang->tr('Définitions des données'),
         ];
@@ -105,6 +107,7 @@ class StatusList
             'json_file_loader' => $this->lang->tr('Fichier (JSON)'),
             'csv_file_loader' => $this->lang->tr('Fichier (CSV)'),
             'pdf_file_loader' => $this->lang->tr('Fichier (PDF)'),
+            'entity_import_loader' => $this->lang->tr('Importation entité'),
         ];
     }
 
@@ -115,7 +118,7 @@ class StatusList
     public function getDataDefinitionExtractor(): array
     {
         return [
-            'db_extractor' => $this->lang->tr('Requete SQL'),
+            'csv_file_extractor' => $this->lang->tr('Fichier (CSV)'),
             'repository_extractor' => $this->lang->tr('Modèle (Repository)'),
         ];
     }
@@ -127,7 +130,7 @@ class StatusList
     public function getDataDefinitionTransformer(): array
     {
         return [
-            'simple_transformer' => $this->lang->tr('Formattage (simple)'),
+            'entity_import_transformer' => $this->lang->tr('Formattage entité (import)'),
             'entity_transformer' => $this->lang->tr('Formattage (Entité)'),
         ];
     }

@@ -10,3 +10,5 @@ nbproject
 storage/tmp/logs/*.log
 storage/tmp/cache/*
 storage/tmp/session/*
+storage/data/attachments/**/*
+storage/data/export/**/*

@@ -10,6 +10,10 @@ use Platine\Etl\Etl;
 use Platine\Etl\Extractor\ExtractorInterface;
 use Platine\Orm\RepositoryInterface;
 
+/**
+ * @class RepositoryExtractor
+ * @package Platine\App\Etl\Extractor
+ */
 class RepositoryExtractor implements ExtractorInterface
 {
     /**
@@ -55,6 +59,9 @@ class RepositoryExtractor implements ExtractorInterface
         $this->filters = $filters;
     }
 
+    /**
+    * {@inheritdoc}
+    */
     public function extract($input, Etl $etl, array $options = []): iterable
     {
         $fields = $this->dataFields;

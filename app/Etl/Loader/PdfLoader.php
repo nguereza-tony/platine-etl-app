@@ -9,10 +9,12 @@ use Platine\App\Model\Entity\DataDefinition;
 use Platine\Etl\Etl;
 use Platine\Etl\Loader\LoaderInterface;
 use Platine\PDF\PDF;
-use Platine\Stdlib\Helper\Json;
 use Platine\Template\Template;
-use RuntimeException;
 
+/**
+ * @class PdfLoader
+ * @package Platine\App\Etl\Loader
+ */
 class PdfLoader implements LoaderInterface
 {
     /**
@@ -78,6 +80,9 @@ class PdfLoader implements LoaderInterface
     }
 
 
+    /**
+    * {@inheritdoc}
+    */
     public function commit(bool $partial): void
     {
         if ($partial) {
@@ -97,11 +102,17 @@ class PdfLoader implements LoaderInterface
                    ->save();
     }
 
+    /**
+    * {@inheritdoc}
+    */
     public function init(array $options = []): void
     {
         $this->data = [];
     }
 
+    /**
+    * {@inheritdoc}
+    */
     public function load(Generator $items, $key, Etl $etl): void
     {
         foreach ($items as $k => $v) {
@@ -109,6 +120,9 @@ class PdfLoader implements LoaderInterface
         }
     }
 
+    /**
+    * {@inheritdoc}
+    */
     public function rollback(): void
     {
         $this->queryBuilder->getConnection()->rollback();

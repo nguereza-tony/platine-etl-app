@@ -59,6 +59,7 @@ use Platine\App\Http\Action\HomeAction;
 use Platine\App\Model\Repository\DataDefinitionFieldRepository;
 use Platine\App\Model\Repository\DataDefinitionImportRepository;
 use Platine\App\Model\Repository\DataDefinitionRepository;
+use Platine\App\Model\Repository\DemoRepository;
 use Platine\App\Model\Repository\FileRepository;
 use Platine\Framework\Helper\Flash;
 use Platine\Framework\Service\ServiceProvider;
@@ -83,6 +84,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(DataDefinitionRepository::class);
         $this->app->bind(DataDefinitionFieldRepository::class);
         $this->app->bind(DataDefinitionImportRepository::class);
+        $this->app->bind(DemoRepository::class);
 
         /**
          * Filters

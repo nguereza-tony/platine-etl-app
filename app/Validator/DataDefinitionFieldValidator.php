@@ -58,6 +58,7 @@ class DataDefinitionFieldValidator extends AbstractValidator
         $this->addRules('field', [
             new NotEmpty(),
             new MinLength(2),
+            new AlphaNumericDash(),
         ]);
 
         $this->addRules('name', [

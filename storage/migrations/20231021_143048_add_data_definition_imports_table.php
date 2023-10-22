@@ -39,6 +39,12 @@ class AddDataDefinitionImportsTable20231021143048 extends AbstractMigration
                  ->defaultValue('P')
                  ->notNull();
             
+            $table->text('error_items')
+                    ->description('Error items');
+            
+            $table->text('processed_items')
+                    ->description('Processed items');
+            
             $table->integer('data_definition_id')
                 ->description('The data definition')
                  ->notNull();

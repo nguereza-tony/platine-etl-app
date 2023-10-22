@@ -60,6 +60,7 @@ use Platine\App\Http\Action\DataDefinition\Field\DataDefinitionFieldEditAction;
 use Platine\App\Http\Action\DataDefinition\Import\DataDefinitionImportCreateAction;
 use Platine\App\Http\Action\DataDefinition\Import\DataDefinitionImportDetailAction;
 use Platine\App\Http\Action\DataDefinition\Import\DataDefinitionImportListAction;
+use Platine\App\Http\Action\DataDefinition\Import\DataDefinitionImportProcessAction;
 use Platine\Framework\Service\ServiceProvider;
 use Platine\Route\Router;
 
@@ -87,6 +88,7 @@ class DataDefinitionServiceProvider extends ServiceProvider
         $this->app->bind(DataDefinitionImportListAction::class);
         $this->app->bind(DataDefinitionImportCreateAction::class);
         $this->app->bind(DataDefinitionImportDetailAction::class);
+        $this->app->bind(DataDefinitionImportProcessAction::class);
     }
 
     /**
@@ -112,7 +114,7 @@ class DataDefinitionServiceProvider extends ServiceProvider
                 $router->get('', DataDefinitionImportListAction::class, 'data_definition_import_list');
                 $router->add('/create', DataDefinitionImportCreateAction::class, ['GET', 'POST'], 'data_definition_import_create');
                 $router->get('/detail/{id}', DataDefinitionImportDetailAction::class, 'data_definition_import_detail');
-                $router->get('/process/{id}', DataDefinitionExportProcessAction::class, 'data_definition_import_process');
+                $router->get('/process/{id}', DataDefinitionImportProcessAction::class, 'data_definition_import_process');
             });
 
             $router->group('/fields', function (Router $router) {

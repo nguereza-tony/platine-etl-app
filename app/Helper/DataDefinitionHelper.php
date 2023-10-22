@@ -5,11 +5,16 @@ declare(strict_types=1);
 namespace Platine\App\Helper;
 
 use Platine\App\Model\Entity\DataDefinition;
+use Platine\App\Model\Entity\DataDefinitionImport;
 use Platine\App\Model\Repository\DataDefinitionFieldRepository;
+use Platine\App\Model\Repository\DataDefinitionImportRepository;
 use Platine\App\Model\Repository\DataDefinitionRepository;
+use Platine\Config\Config;
 use Platine\Container\ContainerInterface;
-use Platine\Database\QueryBuilder;
 use Platine\Etl\EtlTool;
+use Platine\Etl\Event\ItemEvent;
+use Platine\Etl\Event\ItemExceptionEvent;
+use Platine\Logger\LoggerInterface;
 use Platine\Stdlib\Helper\Str;
 
 /**
@@ -25,12 +30,6 @@ class DataDefinitionHelper
     protected ContainerInterface $container;
 
     /**
-     * The QueryBuilder instance
-     * @var QueryBuilder
-     */
-    protected QueryBuilder $queryBuilder;
-
-    /**
      * The DataDefinitionRepository
      * @var DataDefinitionRepository
      */
@@ -43,22 +42,124 @@ class DataDefinitionHelper
     protected DataDefinitionFieldRepository $dataDefinitionFieldRepository;
 
     /**
+     * The DataDefinitionImportRepository instance
+     * @var DataDefinitionImportRepository
+     */
+    protected DataDefinitionImportRepository $dataDefinitionImportRepository;
+
+    /**
+     * The FileHelper instance
+     * @var FileHelper
+     */
+    protected FileHelper $fileHelper;
+
+    /**
+     * The Config instance
+     * @var Config
+     */
+    protected Config $config;
+
+    /**
+     * The logger instance
+     * @var LoggerInterface
+     */
+    protected LoggerInterface $logger;
+
+    /**
      * Create new instance
      * @param ContainerInterface $container
-     * @param QueryBuilder $queryBuilder
      * @param DataDefinitionRepository $dataDefinitionRepository
      * @param DataDefinitionFieldRepository $dataDefinitionFieldRepository
+     * @param FileHelper $fileHelper
+     * @param Config $config
+     * @param LoggerInterface $logger
+     * @param DataDefinitionImportRepository $dataDefinitionImportRepository
      */
     public function __construct(
         ContainerInterface $container,
-        QueryBuilder $queryBuilder,
         DataDefinitionRepository $dataDefinitionRepository,
-        DataDefinitionFieldRepository $dataDefinitionFieldRepository
+        DataDefinitionFieldRepository $dataDefinitionFieldRepository,
+        FileHelper $fileHelper,
+        Config $config,
+        LoggerInterface $logger,
+        DataDefinitionImportRepository $dataDefinitionImportRepository
     ) {
         $this->container = $container;
-        $this->queryBuilder = $queryBuilder;
         $this->dataDefinitionRepository = $dataDefinitionRepository;
         $this->dataDefinitionFieldRepository = $dataDefinitionFieldRepository;
+        $this->dataDefinitionImportRepository = $dataDefinitionImportRepository;
+        $this->fileHelper = $fileHelper;
+        $this->config = $config;
+        $this->logger = $logger;
+    }
+
+    /**
+     * Process import of data
+     * @param DataDefinitionImport $import
+     * @return array<string, mixed>
+     */
+    public function import(DataDefinitionImport $import): array
+    {
+        $file = $import->file;
+        $definition = $import->definition;
+
+        $importPath = $this->fileHelper->getEnterprisePath(
+            $this->config->get('platform.data_attachment_path'),
+            true
+        );
+
+        $path = sprintf(
+            '%simport%s%s',
+            $importPath,
+            DIRECTORY_SEPARATOR,
+            $file->name
+        );
+
+        $dataFields = $this->getDefinitionFields($definition->id);
+
+        $errorItems = [];
+        $processItems = [];
+
+        $etlTool = new EtlTool();
+        $etlTool->setFlushCount(50);
+        $etlTool->onLoadException(function (ItemExceptionEvent $e) use (&$errorItems) {
+            $e->ignoreException();
+            $errorItems[] = $e->getItem();
+        })
+        ->onLoad(function (ItemEvent $e) use (&$processItems) {
+            $processItems[] = $e->getItem();
+        });
+
+        $loaderClosure = $this->container->get($definition->loader);
+        $loader = $loaderClosure($definition, $dataFields, $path, []);
+
+        $extractorClosure = $this->container->get($definition->extractor);
+        $extractor = $extractorClosure($definition, $dataFields, $path, []);
+
+        $etlTool->extractor($extractor)
+                ->loader($loader);
+
+        if ($definition->transformer !== null) {
+            $transformerClosure = $this->container->get($definition->transformer);
+            $transformer = $transformerClosure($definition, $dataFields, $path, []);
+            $etlTool->transformer($transformer);
+        }
+        $etl = $etlTool->create();
+
+        $etl->process($path);
+
+        $processedCount = count($processItems);
+        $errorCount = count($errorItems);
+        $total = $processedCount + $errorCount;
+
+        return [
+            'processed_items' => $processItems,
+            'error_items' => $errorItems,
+            'processed' => $processedCount,
+            'error' => $errorCount,
+            'total' => $total,
+            'success' => $errorCount === 0,
+        ];
     }
 
     /**
@@ -93,7 +194,9 @@ class DataDefinitionHelper
                 ->loader($loader);
 
         if ($definition->transformer !== null) {
-            $etlTool->transformer($this->container->get($definition->transformer));
+            $transformerClosure = $this->container->get($definition->transformer);
+            $transformer = $transformerClosure($definition, $dataFields, $exportPath, $filters);
+            $etlTool->transformer($transformer);
         }
         $etl = $etlTool->create();
 
@@ -122,7 +225,7 @@ class DataDefinitionHelper
             $fieldNames[] = $row->field;
             $displayNames[] = $row->name;
 
-            $dataFields[] = [
+            $dataFields['data'][$row->field] = [
               'field' => $row->field,
               'column' => $row->column,
               'display_name' => $row->name,

@@ -47,12 +47,13 @@ declare(strict_types=1);
 
 namespace Platine\App\Provider;
 
-use Platine\App\Etl\Extractor\DbExtractor;
+use Platine\App\Enum\YesNoStatus;
 use Platine\App\Etl\Extractor\RepositoryExtractor;
 use Platine\App\Etl\Loader\PdfLoader;
+use Platine\App\Etl\Loader\RepositoryLoader;
 use Platine\App\Model\Entity\DataDefinition;
 use Platine\Container\ContainerInterface;
-use Platine\Database\QueryBuilder;
+use Platine\Database\Connection;
 use Platine\Etl\Etl;
 use Platine\Etl\Extractor\CsvExtractor;
 use Platine\Etl\Loader\CsvFileLoader;
@@ -72,28 +73,38 @@ class EtlServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->share('simple_transformer', function (ContainerInterface $app) {
-            return function ($value, $key, Etl $etl, array $options = []) {
-                if (empty($value['updated_at'])) {
-                    $value['updated_at'] = null;
-                }
-
-                yield $key => $value;
+        $this->app->share('entity_import_transformer', function (ContainerInterface $app) {
+            return function (
+                DataDefinition $definition,
+                array $dataFields,
+                string $path,
+                array $filters = []
+            ) use ($app) {
+                return function ($value, $key, Etl $etl, array $options = []) {
+                    yield $key => $value;
+                };
             };
         });
 
         $this->app->share('entity_transformer', function (ContainerInterface $app) {
-            return function ($value, $key, Etl $etl, array $options = []) {
-                $data = $value->jsonSerialize();
-                if (array_key_exists('updated_at', $data) && $value->updated_at !== null) {
-                    $data['updated_at'] = $value->updated_at->format('Y-m-d H:i:s');
-                }
+            return function (
+                DataDefinition $definition,
+                array $dataFields,
+                string $path,
+                array $filters = []
+            ) use ($app) {
+                return function ($value, $key, Etl $etl, array $options = []) {
+                    $data = $value->jsonSerialize();
+                    if (array_key_exists('updated_at', $data) && $value->updated_at !== null) {
+                        $data['updated_at'] = $value->updated_at->format('Y-m-d H:i:s');
+                    }
 
-                if (array_key_exists('created_at', $data) && $value->created_at !== null) {
-                    $data['created_at'] = $value->created_at->format('Y-m-d H:i:s');
-                }
+                    if (array_key_exists('created_at', $data) && $value->created_at !== null) {
+                        $data['created_at'] = $value->created_at->format('Y-m-d H:i:s');
+                    }
 
-                yield $key => $data;
+                    yield $key => $data;
+                };
             };
         });
 
@@ -125,6 +136,22 @@ class EtlServiceProvider extends ServiceProvider
             };
         });
 
+        $this->app->share('entity_import_loader', function (ContainerInterface $app) {
+            return function (
+                DataDefinition $definition,
+                array $dataFields,
+                string $path,
+                array $filters = []
+            ) use ($app) {
+                return new RepositoryLoader(
+                    $definition,
+                    $app,
+                    $app->get(Connection::class),
+                    $dataFields
+                );
+            };
+        });
+
         $this->app->share('pdf_file_loader', function (ContainerInterface $app) {
             return function (
                 DataDefinition $definition,
@@ -144,15 +171,22 @@ class EtlServiceProvider extends ServiceProvider
         });
 
         $this->app->share('csv_file_extractor', function (ContainerInterface $app) {
-            return new CsvExtractor(
-                CsvExtractor::EXTRACT_FROM_FILE,
-                true
-            );
+            return function (
+                DataDefinition $definition,
+                array $dataFields,
+                string $path,
+                array $filters = []
+            ) use ($app) {
+                return new CsvExtractor(
+                    CsvExtractor::EXTRACT_FROM_FILE,
+                    $definition->header === YesNoStatus::YES,
+                    $definition->field_separator ?? ',',
+                    $definition->text_delimiter ?? '"',
+                    $definition->escape_char ?? '\\'
+                );
+            };
         });
 
-        $this->app->share('db_extractor', function (ContainerInterface $app) {
-            return new DbExtractor($app->get(QueryBuilder::class));
-        });
 
         $this->app->share('repository_extractor', function (ContainerInterface $app) {
             return function (
