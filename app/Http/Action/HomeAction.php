@@ -48,8 +48,8 @@ declare(strict_types=1);
 namespace Platine\App\Http\Action;
 
 use Platine\App\Helper\ActionHelper;
-use Platine\App\Model\Repository\DataDefinitionFieldRepository;
-use Platine\App\Model\Repository\DataDefinitionRepository;
+use Platine\App\Module\Etl\Repository\DataDefinitionFieldRepository;
+use Platine\App\Module\Etl\Repository\DataDefinitionRepository;
 use Platine\Container\ContainerInterface;
 use Platine\Database\QueryBuilder;
 use Platine\Filesystem\Filesystem;
@@ -123,11 +123,8 @@ class HomeAction extends BaseAction
      */
     public function respond(): ResponseInterface
     {
-        $param = $this->param;
         $this->setView('home');
 
-
-        $this->sidebar->add('', 'Home', 'home');
 
         return $this->viewResponse();
     }

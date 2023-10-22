@@ -1,9 +1,10 @@
 <?php
 
+use Platine\App\Module\Etl\Provider\EtlActionServiceProvider;
+use Platine\App\Module\Etl\Provider\EtlRepositoryServiceProvider;
+use Platine\App\Module\Etl\Provider\EtlServiceProvider;
 use Platine\App\Provider\AppServiceProvider;
 use Platine\App\Provider\ConsoleServiceProvider;
-use Platine\App\Provider\DataDefinitionServiceProvider;
-use Platine\App\Provider\EtlServiceProvider;
 use Platine\Framework\Service\Provider\AuthServiceProvider;
 use Platine\Framework\Service\Provider\CommandServiceProvider;
 use Platine\Framework\Service\Provider\DatabaseConfigServiceProvider;
@@ -46,6 +47,7 @@ use Platine\Framework\Service\Provider\TemplateServiceProvider;
         //Custom
         AppServiceProvider::class,
         EtlServiceProvider::class,
-        DataDefinitionServiceProvider::class,
+        EtlActionServiceProvider::class,
+        EtlRepositoryServiceProvider::class,
         PDFServiceProvider::class,
     ];

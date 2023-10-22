@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Platine\App\Helper;
 
-use Platine\App\Enum\DataDefinitionDirection;
-use Platine\App\Enum\DataDefinitionImportStatus;
 use Platine\App\Enum\YesNoStatus;
 use Platine\App\Filter\UserFilter;
-use Platine\App\Model\Repository\DataDefinitionRepository;
+use Platine\App\Module\Etl\Repository\DataDefinitionRepository;
 use Platine\App\Model\Repository\DemoRepository;
+use Platine\App\Module\Etl\Enum\DataDefinitionDirection;
+use Platine\App\Module\Etl\Enum\DataDefinitionImportStatus;
 use Platine\Framework\Auth\Repository\UserRepository;
 use Platine\Lang\Lang;
 

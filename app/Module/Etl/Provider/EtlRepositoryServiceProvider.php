@@ -30,11 +30,11 @@
  */
 
 /**
- *  @file AppServiceProvider.php
+ *  @file EtlRepositoryServiceProvider.php
  *
- *  The Application service provider class
+ *  The ETL Repository service provider class
  *
- *  @package    Platine\App\Provider
+ *  @package    Platine\App\Module\Etl\Provider
  *  @author Platine Developers team
  *  @copyright  Copyright (c) 2020
  *  @license    http://opensource.org/licenses/MIT  MIT License
@@ -45,55 +45,26 @@
 
 declare(strict_types=1);
 
-namespace Platine\App\Provider;
+namespace Platine\App\Module\Etl\Provider;
 
-use Platine\App\Filter\UserFilter;
-use Platine\App\Helper\ActionHelper;
-use Platine\App\Helper\FileHelper;
-use Platine\App\Helper\Filter;
-use Platine\App\Helper\Sidebar;
-use Platine\App\Helper\StatusList;
-use Platine\App\Helper\ViewContext;
-use Platine\App\Http\Action\HomeAction;
-use Platine\App\Model\Repository\DemoRepository;
-use Platine\App\Model\Repository\FileRepository;
-use Platine\Framework\Helper\Flash;
+use Platine\App\Module\Etl\Repository\DataDefinitionFieldRepository;
+use Platine\App\Module\Etl\Repository\DataDefinitionImportRepository;
+use Platine\App\Module\Etl\Repository\DataDefinitionRepository;
 use Platine\Framework\Service\ServiceProvider;
 
 /**
- * @class AppServiceProvider
- * @package Platine\App\Provider
+ * @class EtlRepositoryServiceProvider
+ * @package Platine\App\Module\Etl\Provider
  */
-class AppServiceProvider extends ServiceProvider
+class EtlRepositoryServiceProvider extends ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
     public function register(): void
     {
-        $this->app->bind(HomeAction::class);
-
-        /**
-         * Repositories
-         */
-        $this->app->bind(FileRepository::class);
-        $this->app->bind(DemoRepository::class);
-
-        /**
-         * Filters
-         */
-        $this->app->bind(UserFilter::class);
-
-
-        /**
-         * Others
-         */
-        $this->app->bind(FileHelper::class);
-        $this->app->bind(ViewContext::class);
-        $this->app->bind(Sidebar::class);
-        $this->app->share(ActionHelper::class);
-        $this->app->bind(Flash::class);
-        $this->app->bind(Filter::class);
-        $this->app->share(StatusList::class);
+        $this->app->bind(DataDefinitionRepository::class);
+        $this->app->bind(DataDefinitionFieldRepository::class);
+        $this->app->bind(DataDefinitionImportRepository::class);
     }
 }
