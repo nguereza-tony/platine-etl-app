@@ -79,6 +79,7 @@ class RepositoryLoader implements LoaderInterface
 
     /**
     * {@inheritdoc}
+    * @param Generator<int|string, mixed> $items
     */
     public function load(Generator $items, $key, Etl $etl): void
     {
@@ -106,11 +107,13 @@ class RepositoryLoader implements LoaderInterface
      * For the entity row
      * @param array<string, mixed> $item
      * @param array<string> $columns
-     * @param array<string, mixed> $fields
+     * @param array<string, array<string, mixed>> $fields
      * @return array<string, mixed>
      */
     protected function formatRow(array $item, array $columns, array $fields): array
     {
+
+        /** @var array<string, mixed> $data */
         $data = Arr::only($item, $columns);
         $diffColumns = array_diff($columns, array_keys($data));
         foreach ($diffColumns as $col) {

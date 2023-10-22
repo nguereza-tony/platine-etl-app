@@ -39,6 +39,20 @@ class StatusList
      *
      * @return array<string, mixed>
      */
+    public function getYesNoStatus(): array
+    {
+        return [
+            YesNoStatus::YES => $this->lang->tr('Oui'),
+            YesNoStatus::NO => $this->lang->tr('Non'),
+        ];
+    }
+
+    /* DATA DEFINITIONS START */
+
+    /**
+     *
+     * @return array<string, mixed>
+     */
     public function getDataDefinitionImportStatus(): array
     {
         return [
@@ -61,17 +75,6 @@ class StatusList
         ];
     }
 
-    /**
-     *
-     * @return array<string, mixed>
-     */
-    public function getYesNoStatus(): array
-    {
-        return [
-            YesNoStatus::YES => $this->lang->tr('Oui'),
-            YesNoStatus::NO => $this->lang->tr('Non'),
-        ];
-    }
 
     /**
      *
@@ -134,4 +137,6 @@ class StatusList
             'entity_transformer' => $this->lang->tr('Formattage (Entité)'),
         ];
     }
+
+    /* DATA DEFINITIONS END */
 }

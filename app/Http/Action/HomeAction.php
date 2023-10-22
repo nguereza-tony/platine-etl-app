@@ -52,12 +52,9 @@ use Platine\App\Model\Repository\DataDefinitionFieldRepository;
 use Platine\App\Model\Repository\DataDefinitionRepository;
 use Platine\Container\ContainerInterface;
 use Platine\Database\QueryBuilder;
-use Platine\Etl\EtlTool;
-use Platine\Etl\Event\FlushEvent;
 use Platine\Filesystem\Filesystem;
 use Platine\Framework\App\Application;
 use Platine\Http\ResponseInterface;
-use RuntimeException;
 
 /**
  * @class HomeAction
@@ -128,50 +125,7 @@ class HomeAction extends BaseAction
     {
         $param = $this->param;
         $this->setView('home');
-        $definitionId = (int) $param->get('definition', 1);
-        $definition = $this->dataDefinitionRepository->find($definitionId);
-        if ($definition === null) {
-            throw new RuntimeException(sprintf('Can not found data definition with id [%d]', $definitionId));
-        }
 
-        $dataFields = $this->getDefinitionFields($definitionId);
-
-
-        $context = [];
-        $importCsvFilename = 'import.csv';
-        $importJsonFilename = 'import.json';
-        $tmpPath = $this->config->get('platform.data_temp_path');
-        $exportPath = $this->config->get('platform.data_export_path');
-        $tmpDir = $this->filesystem->directory($tmpPath);
-        $exportDir = $this->filesystem->directory($exportPath);
-
-        $importCsvPath = $tmpDir->getPath() . DIRECTORY_SEPARATOR . $importCsvFilename;
-        $importJsonPath = $tmpDir->getPath() . DIRECTORY_SEPARATOR . $importJsonFilename;
-
-        $etlTool = new EtlTool();
-        $etlTool->setFlushCount(2);
-
-        $etlTool->extractor($this->container->get($definition->extractor))
-                ->loader($this->container->get($definition->loader))
-                ->onFlush(function (FlushEvent $e) {
-                    $this->logger->info('Flush data -> Is partial: {partial}, counter: {counter}', [
-                        'counter' => $e->getCounter(),
-                        'partial' => $e->isPartial() ? 'Yes' : 'No',
-                    ]);
-                });
-
-        if ($definition->transformer !== null) {
-            $etlTool->transformer($this->container->get($definition->transformer));
-        }
-        $etl = $etlTool->create();
-
-        $etl->process($importCsvPath, [
-            'definition' => $definition,
-            'fields' => $dataFields,
-            'loader' => [
-                'keys' => $dataFields['display_names']
-            ]
-        ]);
 
         $this->sidebar->add('', 'Home', 'home');
 

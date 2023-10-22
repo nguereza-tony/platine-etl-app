@@ -71,6 +71,7 @@ use Platine\Template\Template;
 /**
  * @class BaseAction
  * @package Platine\App\Http\Action
+ * @template T
  */
 abstract class BaseAction implements RequestHandlerInterface
 {
@@ -593,16 +594,5 @@ abstract class BaseAction implements RequestHandlerInterface
         }
 
         return $this->redirect($originRoute, ['id' => $originId]);
-    }
-
-    /**
-     * Allow super administrator to access others data
-     * @return void
-     */
-    protected function setSuperAdminAccess(): void
-    {
-        if ($this->authHelper->isSuperAdmin()) {
-            $this->filters['ignore_enterprise_filter'] = true;
-        }
     }
 }

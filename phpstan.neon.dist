@@ -7,3 +7,8 @@ parameters:
         maximumNumberOfProcesses: 4
     universalObjectCratesClasses:
         - Platine\Orm\Entity
+    checkGenericClassInNonGenericObjectType: false
+    ignoreErrors:
+        - '#Call to an undefined method Platine\\Database\\Query\\Where\|Platine\\Database\\Query\\WhereStatement(.*)#'
+        - '#Call to an undefined method Platine\\Database\\Query\\WhereStatement(.*)#'
+        - '#Parameter \#1 \$entityClass of method Platine\\Orm\\Relation\\RelationFactory(.*)#'

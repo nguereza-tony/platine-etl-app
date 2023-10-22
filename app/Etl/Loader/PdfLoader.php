@@ -62,6 +62,11 @@ class PdfLoader implements LoaderInterface
     /**
      *
      * @param PDF $pdf
+     * @param DataDefinition $dataDefinition
+     * @param Template $template
+     * @param string $path
+     * @param array<string, mixed> $dataFields
+     * @param array<string, mixed> $filters
      */
     public function __construct(
         PDF $pdf,
@@ -112,6 +117,7 @@ class PdfLoader implements LoaderInterface
 
     /**
     * {@inheritdoc}
+    * @param Generator<int|string, mixed> $items
     */
     public function load(Generator $items, $key, Etl $etl): void
     {
@@ -125,6 +131,5 @@ class PdfLoader implements LoaderInterface
     */
     public function rollback(): void
     {
-        $this->queryBuilder->getConnection()->rollback();
     }
 }

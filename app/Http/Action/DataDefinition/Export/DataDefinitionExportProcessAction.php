@@ -87,7 +87,7 @@ class DataDefinitionExportProcessAction extends BaseAction
 
         $id = (int) $request->getAttribute('id');
 
-        /** @var DataDefinition|null $dataDefinition */
+        /** @var DataDefinition|null $definition */
         $definition = $this->dataDefinitionRepository->filters([
                                                         'status' => YesNoStatus::YES,
                                                         'direction' => DataDefinitionDirection::OUT

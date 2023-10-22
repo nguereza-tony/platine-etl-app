@@ -79,7 +79,7 @@ class EtlServiceProvider extends ServiceProvider
                 array $dataFields,
                 string $path,
                 array $filters = []
-            ) use ($app) {
+            ) {
                 return function ($value, $key, Etl $etl, array $options = []) {
                     yield $key => $value;
                 };
@@ -92,7 +92,7 @@ class EtlServiceProvider extends ServiceProvider
                 array $dataFields,
                 string $path,
                 array $filters = []
-            ) use ($app) {
+            ) {
                 return function ($value, $key, Etl $etl, array $options = []) {
                     $data = $value->jsonSerialize();
                     if (array_key_exists('updated_at', $data) && $value->updated_at !== null) {
@@ -114,7 +114,7 @@ class EtlServiceProvider extends ServiceProvider
                 array $dataFields,
                 string $path,
                 array $filters = []
-            ) use ($app) {
+            ) {
                 return new JsonFileLoader($path, JSON_PRETTY_PRINT);
             };
         });
@@ -125,7 +125,7 @@ class EtlServiceProvider extends ServiceProvider
                 array $dataFields,
                 string $path,
                 array $filters = []
-            ) use ($app) {
+            ) {
                 return new CsvFileLoader(
                     $path,
                     $dataFields['display_names'] ?? [],
@@ -176,7 +176,7 @@ class EtlServiceProvider extends ServiceProvider
                 array $dataFields,
                 string $path,
                 array $filters = []
-            ) use ($app) {
+            ) {
                 return new CsvExtractor(
                     CsvExtractor::EXTRACT_FROM_FILE,
                     $definition->header === YesNoStatus::YES,
