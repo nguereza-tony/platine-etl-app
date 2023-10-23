@@ -89,7 +89,7 @@ class DataDefinitionImportDetailAction extends BaseAction
         $this->addSidebar('', 'Importer un fichier', 'data_definition_import_create');
         $this->addSidebar('', 'Définitions', 'data_definition_list');
         if ($dataDefinitionImport->status === DataDefinitionImportStatus::PENDING) {
-            $this->addSidebar('', 'Executer', 'data_definition_import_process', ['id' => $id], ['confirm' => true]);
+            $this->addSidebar('', 'Exécuter', 'data_definition_import_process', ['id' => $id], ['confirm' => true]);
             $this->addSidebar('', 'Annuler', 'data_definition_import_cancel', ['id' => $id], ['confirm' => true]);
         }
         $this->addSidebar('', 'Supprimer', 'data_definition_import_delete', ['id' => $id], ['confirm' => true]);

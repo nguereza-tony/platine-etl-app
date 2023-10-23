@@ -1,27 +1,35 @@
-## PLATINE PHP
-**Platine PHP is a lightweight, high-performance, simple and elegant PHP Web framework**
-
-[![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
-[![Latest Stable Version](https://poser.pugx.org/platine-php/app/v/stable)](https://packagist.org/packages/platine-php/app)
-[![Latest Unstable Version](https://poser.pugx.org/platine-php/app/v/unstable)](https://packagist.org/packages/platine-php/app)
-[![Total Downloads](https://poser.pugx.org/platine-php/app/downloads)](https://packagist.org/packages/platine-php/oauth2)
-[![License](https://poser.pugx.org/platine-php/app/license)](https://packagist.org/packages/platine-php/app)  
-![Build Status](https://github.com/platine-php/app/actions/workflows/ci.yml/badge.svg)
-[![Quality Score](https://img.shields.io/scrutinizer/g/platine-php/app.svg?style=flat-square)](https://scrutinizer-ci.com/g/platine-php/app)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/775a3aa3cc1a4e4282381633bf003128)](https://app.codacy.com/gh/platine-php/app/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/775a3aa3cc1a4e4282381633bf003128)](https://app.codacy.com/gh/platine-php/app/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
+## PLATINE ETL APPLICATION
+**A Platine PHP ETL (Extract-Transform-Load) application template**
 
 ### Requirements 
-You can use **Platine** for web or command line application. For web application: 
 - Any web server **(Apache, nginx, lighttp, etc.)**
 - **PHP >= 7.4**, **PHP 8** 
 
-For CLI application just PHP executable is enough. 
 
 ### Installation
 Platine Application can be installed using composer
 ```bash
-composer create-project platine-php/app
+git clone git@github.com:nguereza-tony/platine-etl-app.git
+
+cd platine-etl-app
+
+composer install
+```
+
+
+### Configuration
+```bash
+cp .env.example .env
+```
+Update configurations like 
+```ini
+PL_APP_URL=http://localhost/platine-etl-app/public
+PL_DB_DRIVER=mysql
+PL_DB_NAME=db_etl_app
+PL_DB_HOST=127.0.0.1
+PL_DB_PORT=3306
+PL_DB_USER=root
+PL_DB_PASSWORD=
 ```
 
 ### Install on docker

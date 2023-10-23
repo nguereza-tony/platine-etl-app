@@ -12,3 +12,4 @@ storage/tmp/cache/*
 storage/tmp/session/*
 storage/data/attachments/**/*
 storage/data/export/**/*
+!/**/.gitignore
