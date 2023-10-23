@@ -140,6 +140,8 @@ class DataDefinitionFieldCreateAction extends BaseAction
             'parent_id' => $parent,
             'column' => $column,
             'data_definition_id' => $id,
+            'enterprise_id' => $this->authHelper->getEnterpiseId(),
+            'user_id' => $this->authHelper->getUserId(),
         ]);
 
         try {

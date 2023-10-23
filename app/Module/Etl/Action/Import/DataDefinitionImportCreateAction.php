@@ -136,6 +136,8 @@ class DataDefinitionImportCreateAction extends BaseAction
                 'status' => $formParam->getStatus(),
                 'data_definition_id' => (int) $formParam->getDataDefinition(),
                 'file_id' => $file->id,
+                'enterprise_id' => $this->authHelper->getEnterpiseId(),
+                'user_id' => $this->authHelper->getUserId(),
             ]);
 
 

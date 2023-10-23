@@ -93,6 +93,12 @@ class ActionHelper
     protected FileHelper $fileHelper;
 
     /**
+     * The auth helper instance
+     * @var AuthHelper
+     */
+    protected AuthHelper $authHelper;
+
+    /**
      * Create new instance
      * @param Pagination $pagination
      * @param Sidebar $sidebar
@@ -105,6 +111,7 @@ class ActionHelper
      * @param LoggerInterface $logger
      * @param StatusList $statusList
      * @param Config<T> $config
+     * @param AuthHelper $authHelper
      * @param AppDatabaseConfig<T> $dbConfig
      */
     public function __construct(
@@ -119,8 +126,10 @@ class ActionHelper
         LoggerInterface $logger,
         StatusList $statusList,
         Config $config,
+        AuthHelper $authHelper,
         AppDatabaseConfig $dbConfig
     ) {
+        $this->authHelper = $authHelper;
         $this->pagination = $pagination;
         $this->sidebar = $sidebar;
         $this->context = $context;
@@ -134,6 +143,16 @@ class ActionHelper
         $this->config = $config;
         $this->dbConfig = $dbConfig;
     }
+
+    /**
+     *
+     * @return AuthHelper
+     */
+    public function getAuthHelper(): AuthHelper
+    {
+        return $this->authHelper;
+    }
+
 
     /**
      *

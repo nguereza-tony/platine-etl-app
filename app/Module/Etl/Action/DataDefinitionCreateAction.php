@@ -146,6 +146,8 @@ class DataDefinitionCreateAction extends BaseAction
             'status' => $formParam->getStatus(),
             'header' => $formParam->getHeader(),
             'extension' => $formParam->getExtension(),
+            'enterprise_id' => $this->authHelper->getEnterpiseId(),
+            'user_id' => $this->authHelper->getUserId(),
         ]);
 
         try {

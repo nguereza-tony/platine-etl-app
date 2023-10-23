@@ -53,6 +53,14 @@ class AddDataDefinitionImportsTable20231021143048 extends AbstractMigration
                 ->description('The import file')
                  ->notNull();
             
+            $table->integer('enterprise_id')
+                ->description('The system company')
+                ->notNull();
+
+            $table->integer('user_id')
+                ->description('The user')
+                ->notNull();
+            
             $table->timestamps();
             
             $table->foreign('data_definition_id')
@@ -61,6 +69,14 @@ class AddDataDefinitionImportsTable20231021143048 extends AbstractMigration
             
             $table->foreign('file_id')
                 ->references('files', 'id')
+                ->onDelete('NO ACTION');
+            
+            $table->foreign('enterprise_id')
+                ->references('enterprises', 'id')
+                ->onDelete('NO ACTION');
+
+            $table->foreign('user_id')
+                ->references('users', 'id')
                 ->onDelete('NO ACTION');
 
             $table->engine('INNODB');

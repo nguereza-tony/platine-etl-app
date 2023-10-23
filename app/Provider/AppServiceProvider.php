@@ -49,6 +49,8 @@ namespace Platine\App\Provider;
 
 use Platine\App\Filter\UserFilter;
 use Platine\App\Helper\ActionHelper;
+use Platine\App\Helper\AuthHelper;
+use Platine\App\Helper\EntityHelper;
 use Platine\App\Helper\FileHelper;
 use Platine\App\Helper\Filter;
 use Platine\App\Helper\Sidebar;
@@ -57,6 +59,8 @@ use Platine\App\Helper\ViewContext;
 use Platine\App\Http\Action\HomeAction;
 use Platine\App\Model\Repository\DemoRepository;
 use Platine\App\Model\Repository\FileRepository;
+use Platine\App\Module\Auth\Audit\SessionUser;
+use Platine\Framework\Audit\AuditUserInterface;
 use Platine\Framework\Helper\Flash;
 use Platine\Framework\Service\ServiceProvider;
 
@@ -73,6 +77,8 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(HomeAction::class);
 
+        $this->app->bind(AuditUserInterface::class, SessionUser::class);
+
         /**
          * Repositories
          */
@@ -88,6 +94,8 @@ class AppServiceProvider extends ServiceProvider
         /**
          * Others
          */
+        $this->app->bind(AuthHelper::class);
+        $this->app->bind(EntityHelper::class);
         $this->app->bind(FileHelper::class);
         $this->app->bind(ViewContext::class);
         $this->app->bind(Sidebar::class);

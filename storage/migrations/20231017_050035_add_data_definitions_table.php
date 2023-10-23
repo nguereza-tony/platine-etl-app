@@ -66,7 +66,23 @@ class AddDataDefinitionsTable20231017050035 extends AbstractMigration
             $table->string('extension')
                  ->description('File import/export extension');
             
+            $table->integer('enterprise_id')
+                ->description('The system company')
+                ->notNull();
+
+            $table->integer('user_id')
+                ->description('The user')
+                ->notNull();
+            
             $table->timestamps();
+            
+            $table->foreign('enterprise_id')
+                ->references('enterprises', 'id')
+                ->onDelete('NO ACTION');
+
+            $table->foreign('user_id')
+                ->references('users', 'id')
+                ->onDelete('NO ACTION');
 
             $table->engine('INNODB');
         });

@@ -5,6 +5,7 @@ use Platine\App\Module\Etl\Provider\EtlRepositoryServiceProvider;
 use Platine\App\Module\Etl\Provider\EtlServiceProvider;
 use Platine\App\Provider\AppServiceProvider;
 use Platine\App\Provider\ConsoleServiceProvider;
+use Platine\Framework\Service\Provider\AuditServiceProvider;
 use Platine\Framework\Service\Provider\AuthServiceProvider;
 use Platine\Framework\Service\Provider\CommandServiceProvider;
 use Platine\Framework\Service\Provider\DatabaseConfigServiceProvider;
@@ -37,7 +38,7 @@ use Platine\Framework\Service\Provider\TemplateServiceProvider;
         CommandServiceProvider::class,
         AuthServiceProvider::class,
         // ApiAuthServiceProvider::class,
-        // AuditServiceProvider::class,
+        AuditServiceProvider::class,
         PaginationServiceProvider::class,
         SecurityServiceProvider::class,
         ConsoleServiceProvider::class,

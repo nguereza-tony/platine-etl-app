@@ -42,6 +42,14 @@ class AddDataDefinitionFieldsTable20231017050049 extends AbstractMigration
             $table->integer('data_definition_id')
                 ->description('The data definition')
                  ->notNull();
+            
+            $table->integer('enterprise_id')
+                ->description('The system company')
+                ->notNull();
+
+            $table->integer('user_id')
+                ->description('The user')
+                ->notNull();
 
             $table->timestamps();
 
@@ -51,6 +59,14 @@ class AddDataDefinitionFieldsTable20231017050049 extends AbstractMigration
             
             $table->foreign('parent_id')
                 ->references('data_definition_fields', 'id')
+                ->onDelete('NO ACTION');
+            
+            $table->foreign('enterprise_id')
+                ->references('enterprises', 'id')
+                ->onDelete('NO ACTION');
+
+            $table->foreign('user_id')
+                ->references('users', 'id')
                 ->onDelete('NO ACTION');
 
             $table->engine('INNODB'); 
