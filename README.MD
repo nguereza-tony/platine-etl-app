@@ -32,6 +32,15 @@ PL_DB_USER=root
 PL_DB_PASSWORD=
 ```
 
+
+### Migration
+Execute migration
+```bash
+php platine migration:init
+php platine migration:migrate
+```
+
+
 ### Install on docker
 If you want to test platine using docker follow the step below:
 - Build the platine image
