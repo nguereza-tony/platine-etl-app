@@ -12,6 +12,7 @@ use Platine\App\Module\Etl\Helper\EtlHelper;
 use Platine\App\Module\Etl\Repository\DataDefinitionImportRepository;
 use Platine\Database\Connection;
 use Platine\Http\ResponseInterface;
+use Platine\Stdlib\Helper\Arr;
 use Throwable;
 
 /**
@@ -99,6 +100,17 @@ class DataDefinitionImportProcessAction extends BaseAction
                 $status = DataDefinitionImportStatus::ERROR;
             }
 
+            $fields = $result['fields'];
+            $errorItems = $result['error_items'];
+            $failedItems = array_map(function ($arr) use ($fields) {
+                return Arr::only($arr, $fields);
+            }, $errorItems);
+
+            $processedItems = $result['processed_items'];
+            $successItems = array_map(function ($arr) use ($fields) {
+                return Arr::only($arr, $fields);
+            }, $processedItems);
+
             $this->dataDefinitionImportRepository->query()
                                                  ->where('id')->is($id)
                                                  ->update([
@@ -106,8 +118,8 @@ class DataDefinitionImportProcessAction extends BaseAction
                                                      'total' => $result['total'],
                                                      'processed' => $result['processed'],
                                                      'error' => $result['error'],
-                                                     'error_items' => serialize($result['error_items']),
-                                                     'processed_items' => serialize($result['processed_items']),
+                                                     'error_items' => serialize($failedItems),
+                                                     'processed_items' => serialize($successItems),
                                                   ]);
 
             $this->connection->commit();

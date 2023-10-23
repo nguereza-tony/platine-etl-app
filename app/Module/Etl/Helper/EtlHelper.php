@@ -160,6 +160,8 @@ class EtlHelper
             'error' => $errorCount,
             'total' => $total,
             'success' => $errorCount === 0,
+            'columns' => $dataFields['columns'],
+            'fields' => $dataFields['fields'],
         ];
     }
 
