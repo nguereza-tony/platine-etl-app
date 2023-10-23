@@ -100,17 +100,6 @@ class DataDefinitionImportProcessAction extends BaseAction
                 $status = DataDefinitionImportStatus::ERROR;
             }
 
-            $fields = $result['fields'];
-            $errorItems = $result['error_items'];
-            $failedItems = array_map(function ($arr) use ($fields) {
-                return Arr::only($arr, $fields);
-            }, $errorItems);
-
-            $processedItems = $result['processed_items'];
-            $successItems = array_map(function ($arr) use ($fields) {
-                return Arr::only($arr, $fields);
-            }, $processedItems);
-
             $this->dataDefinitionImportRepository->query()
                                                  ->where('id')->is($id)
                                                  ->update([
@@ -118,8 +107,8 @@ class DataDefinitionImportProcessAction extends BaseAction
                                                      'total' => $result['total'],
                                                      'processed' => $result['processed'],
                                                      'error' => $result['error'],
-                                                     'error_items' => serialize($failedItems),
-                                                     'processed_items' => serialize($successItems),
+                                                     'error_items' => serialize($result['error_items']),
+                                                     'processed_items' => serialize($result['processed_items']),
                                                   ]);
 
             $this->connection->commit();
