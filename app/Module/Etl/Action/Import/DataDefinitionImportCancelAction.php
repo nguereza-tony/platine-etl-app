@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace Platine\App\Module\Etl\Action\Import;
 
-use Platine\App\Module\Etl\Enum\DataDefinitionImportStatus;
 use Platine\App\Helper\ActionHelper;
-use Platine\App\Module\Etl\Helper\EtlHelper;
 use Platine\App\Http\Action\BaseAction;
 use Platine\App\Module\Etl\Entity\DataDefinitionImport;
+use Platine\App\Module\Etl\Enum\DataDefinitionImportStatus;
+use Platine\App\Module\Etl\Helper\EtlHelper;
 use Platine\App\Module\Etl\Repository\DataDefinitionImportRepository;
+use Platine\Database\Connection;
 use Platine\Http\ResponseInterface;
+use Throwable;
 
 /**
-* @class DataDefinitionImportDetailAction
+* @class DataDefinitionImportCancelAction
 * @package Platine\App\Module\Etl\Action\Import
 */
-class DataDefinitionImportDetailAction extends BaseAction
+class DataDefinitionImportCancelAction extends BaseAction
 {
     /**
     * The ActionHelper instance
@@ -38,19 +40,28 @@ class DataDefinitionImportDetailAction extends BaseAction
     protected EtlHelper $dataDefinitionHelper;
 
     /**
+     * The Connection instance
+     * @var Connection
+     */
+    protected Connection $connection;
+
+    /**
     * Create new instance
     * @param ActionHelper $actionHelper
     * @param DataDefinitionImportRepository $dataDefinitionImportRepository
+    * @param Connection $connection
     * @param EtlHelper $dataDefinitionHelper
     */
     public function __construct(
         ActionHelper $actionHelper,
         DataDefinitionImportRepository $dataDefinitionImportRepository,
+        Connection $connection,
         EtlHelper $dataDefinitionHelper
     ) {
         parent::__construct($actionHelper);
         $this->dataDefinitionImportRepository = $dataDefinitionImportRepository;
         $this->dataDefinitionHelper = $dataDefinitionHelper;
+        $this->connection = $connection;
     }
 
     /**
@@ -58,38 +69,38 @@ class DataDefinitionImportDetailAction extends BaseAction
     */
     public function respond(): ResponseInterface
     {
-        $this->setView('etl/import/detail');
-
         $request = $this->request;
         $id = (int) $request->getAttribute('id');
 
         /** @var DataDefinitionImport|null $dataDefinitionImport */
-        $dataDefinitionImport = $this->dataDefinitionImportRepository->find($id);
+        $dataDefinitionImport = $this->dataDefinitionImportRepository->filters([
+                                                                        'status' => DataDefinitionImportStatus::PENDING
+                                                                    ])
+                                                                     ->find($id);
 
         if ($dataDefinitionImport === null) {
             $this->flash->setError($this->lang->tr('Cet enregistrement n\'existe pas'));
 
             return $this->redirect('data_definition_import_list');
         }
-        $this->addContext('import', $dataDefinitionImport);
-        $this->addContext('data_definition_repository', $this->statusList->getDataDefinitionRepository());
-        $this->addContext('data_definition_loader', $this->statusList->getDataDefinitionLoader());
-        $this->addContext('data_definition_extractor', $this->statusList->getDataDefinitionExtractor());
-        $this->addContext('data_definition_transformer', $this->statusList->getDataDefinitionTransformer());
-        $this->addContext('data_definition_filter', $this->statusList->getDataDefinitionFilter());
-        $this->addContext('status', $this->statusList->getYesNoStatus());
-        $this->addContext('definition_import_status', $this->statusList->getDataDefinitionImportStatus());
 
+        $this->connection->startTransaction();
+        try {
+            $dataDefinitionImport->status = DataDefinitionImportStatus::CANCELLED;
+            $this->dataDefinitionImportRepository->save($dataDefinitionImport);
 
-        $this->addSidebar('', 'Importations', 'data_definition_import_list');
-        $this->addSidebar('', 'Importer un fichier', 'data_definition_import_create');
-        $this->addSidebar('', 'Définitions', 'data_definition_list');
-        if ($dataDefinitionImport->status === DataDefinitionImportStatus::PENDING) {
-            $this->addSidebar('', 'Executer', 'data_definition_import_process', ['id' => $id], ['confirm' => true]);
-            $this->addSidebar('', 'Annuler', 'data_definition_import_cancel', ['id' => $id], ['confirm' => true]);
+            $this->flash->setSuccess($this->lang->tr('Donnée enregistrée avec succès'));
+
+            $this->connection->commit();
+
+            return $this->redirect('data_definition_import_detail', ['id' => $id]);
+        } catch (Throwable $ex) {
+             $this->connection->rollback();
+            $this->logger->error('Error when saved the data {error}', ['error' => $ex->getMessage()]);
+
+            $this->flash->setError($this->lang->tr('Erreur lors de traitement des données'));
+
+            return $this->redirect('data_definition_import_detail', ['id' => $id]);
         }
-        $this->addSidebar('', 'Supprimer', 'data_definition_import_delete', ['id' => $id], ['confirm' => true]);
-
-        return $this->viewResponse();
     }
 }

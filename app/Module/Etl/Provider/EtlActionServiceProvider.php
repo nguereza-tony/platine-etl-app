@@ -57,7 +57,9 @@ use Platine\App\Module\Etl\Action\Export\DataDefinitionExportProcessAction;
 use Platine\App\Module\Etl\Action\Field\DataDefinitionFieldCreateAction;
 use Platine\App\Module\Etl\Action\Field\DataDefinitionFieldDeleteAction;
 use Platine\App\Module\Etl\Action\Field\DataDefinitionFieldEditAction;
+use Platine\App\Module\Etl\Action\Import\DataDefinitionImportCancelAction;
 use Platine\App\Module\Etl\Action\Import\DataDefinitionImportCreateAction;
+use Platine\App\Module\Etl\Action\Import\DataDefinitionImportDeleteAction;
 use Platine\App\Module\Etl\Action\Import\DataDefinitionImportDetailAction;
 use Platine\App\Module\Etl\Action\Import\DataDefinitionImportListAction;
 use Platine\App\Module\Etl\Action\Import\DataDefinitionImportProcessAction;
@@ -89,6 +91,8 @@ class EtlActionServiceProvider extends ServiceProvider
         $this->app->bind(DataDefinitionImportCreateAction::class);
         $this->app->bind(DataDefinitionImportDetailAction::class);
         $this->app->bind(DataDefinitionImportProcessAction::class);
+        $this->app->bind(DataDefinitionImportCancelAction::class);
+        $this->app->bind(DataDefinitionImportDeleteAction::class);
     }
 
     /**
@@ -123,6 +127,8 @@ class EtlActionServiceProvider extends ServiceProvider
                 $router->add('/create', DataDefinitionImportCreateAction::class, ['GET', 'POST'], 'data_definition_import_create');
                 $router->get('/detail/{id}', DataDefinitionImportDetailAction::class, 'data_definition_import_detail');
                 $router->get('/process/{id}', DataDefinitionImportProcessAction::class, 'data_definition_import_process');
+                $router->get('/cancel/{id}', DataDefinitionImportCancelAction::class, 'data_definition_import_cancel');
+                $router->get('/delete/{id}', DataDefinitionImportDeleteAction::class, 'data_definition_import_delete');
             });
         });
     }
