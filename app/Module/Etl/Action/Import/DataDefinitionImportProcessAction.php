@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Platine\App\Module\Etl\Action\Import;
 
-use Platine\App\Module\Etl\Enum\DataDefinitionImportStatus;
 use Platine\App\Helper\ActionHelper;
-use Platine\App\Module\Etl\Helper\EtlHelper;
 use Platine\App\Http\Action\BaseAction;
 use Platine\App\Module\Etl\Entity\DataDefinitionImport;
+use Platine\App\Module\Etl\Enum\DataDefinitionImportStatus;
+use Platine\App\Module\Etl\Helper\EtlHelper;
 use Platine\App\Module\Etl\Repository\DataDefinitionImportRepository;
 use Platine\Database\Connection;
 use Platine\Http\ResponseInterface;
-use Platine\Stdlib\Helper\Json;
 use Throwable;
 
 /**
@@ -107,8 +106,8 @@ class DataDefinitionImportProcessAction extends BaseAction
                                                      'total' => $result['total'],
                                                      'processed' => $result['processed'],
                                                      'error' => $result['error'],
-                                                     'error_items' => Json::encode($result['error_items'], JSON_PRETTY_PRINT),
-                                                     'processed_items' => Json::encode($result['processed_items'], JSON_PRETTY_PRINT),
+                                                     'error_items' => serialize($result['error_items']),
+                                                     'processed_items' => serialize($result['processed_items']),
                                                   ]);
 
             $this->connection->commit();

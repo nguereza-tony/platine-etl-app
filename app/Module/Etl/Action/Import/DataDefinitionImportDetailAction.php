@@ -71,6 +71,10 @@ class DataDefinitionImportDetailAction extends BaseAction
 
             return $this->redirect('data_definition_import_list');
         }
+
+        $dataDefinitionImport->error_items = unserialize($dataDefinitionImport->error_items);
+        $dataDefinitionImport->processed_items = unserialize($dataDefinitionImport->processed_items);
+
         $this->addContext('import', $dataDefinitionImport);
         $this->addContext('data_definition_repository', $this->statusList->getDataDefinitionRepository());
         $this->addContext('data_definition_loader', $this->statusList->getDataDefinitionLoader());
