@@ -38,28 +38,15 @@ Execute migration
 ```bash
 php platine migration:init
 php platine migration:migrate
+php platine seed:exec
 ```
 
 
-### Install on docker
-If you want to test platine using docker follow the step below:
-- Build the platine image
-```bash
-docker-compose build app
-```
-- Run the containers
-```bash
-docker-compose up -d
-```
-- Install composer dependencies
-```bash
-docker-compose exec app composer install --no-interaction --optimize-autoloader --no-dev
-```
-Then open `http://server_domain_or_IP:8000`, for example `http://localhost:8000`.  
+### Launch the application
+Access the application via http://localhost/platine-etl-app/public 
 
 ### License
 MIT License See [LICENSE.MD](LICENSE.MD)
 
 ### Resources 
- - [Documentation](https://docs.platine-php.com)  
- - Tutorial Youtube (French): [Budget Management Application](https://www.youtube.com/playlist?list=PLbUHyVcL-6Q8H6ip40eSdpt4MjRXYGPz9)
+ - [Documentation](https://docs.platine-php.com)
