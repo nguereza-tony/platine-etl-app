@@ -9,7 +9,9 @@ nbproject
 .php_cs.cache
 storage/tmp/logs/*.log
 storage/tmp/cache/*
+!storage/tmp/cache/.gitignore
 storage/tmp/session/*
+!storage/tmp/session/.gitignore
 storage/data/attachments/**/*
 storage/data/export/**/*
 !/**/.gitignore
