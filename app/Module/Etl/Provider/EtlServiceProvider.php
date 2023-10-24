@@ -47,7 +47,6 @@ declare(strict_types=1);
 
 namespace Platine\App\Module\Etl\Provider;
 
-use Closure;
 use Platine\App\Enum\YesNoStatus;
 use Platine\App\Module\Etl\Entity\DataDefinition;
 use Platine\App\Module\Etl\Extractor\RepositoryExtractor;

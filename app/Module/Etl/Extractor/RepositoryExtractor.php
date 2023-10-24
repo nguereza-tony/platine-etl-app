@@ -72,7 +72,10 @@ class RepositoryExtractor implements ExtractorInterface
 
         $results = $repository->query()
                               ->filter($this->filters)
-                              ->all($fields['columns'] ?? [], false);
+                              ->all(array_combine(
+                                  $fields['columns'] ?? [],
+                                  $fields['fields'] ?? []
+                              ), false);
 
         return $results;
     }
