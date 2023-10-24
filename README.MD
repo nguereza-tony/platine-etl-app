@@ -7,7 +7,6 @@
 
 
 ### Installation
-Platine Application can be installed using composer
 ```bash
 git clone git@github.com:nguereza-tony/platine-etl-app.git
 
