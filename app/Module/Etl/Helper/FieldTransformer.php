@@ -26,16 +26,17 @@ class FieldTransformer
     /**
      * Return the formatted date time
      * @param DateTime|string|int $param
+     * @param mixed|string $format the date format
      * @return string
      */
-    public static function datetime($param): string
+    public static function datetime($param, $format = 'Y-m-d H:i:s'): string
     {
         if ($param instanceof DateTime) {
-            return $param->format('Y-m-d H:i:s');
+            return $param->format($format);
         }
 
         if (is_int($param)) {
-            return date('Y-m-d H:i:s', $param);
+            return date($format, $param);
         }
 
         return $param;
@@ -44,16 +45,17 @@ class FieldTransformer
     /**
      * Return the formatted date
      * @param DateTime|string|int $param
+     * @param mixed|string $format the date format
      * @return string
      */
-    public static function date($param): string
+    public static function date($param, $format = 'Y-m-d'): string
     {
         if ($param instanceof DateTime) {
-            return $param->format('Y-m-d');
+            return $param->format($format);
         }
 
         if (is_int($param)) {
-            return date('Y-m-d', $param);
+            return date($format, $param);
         }
 
         return $param;
