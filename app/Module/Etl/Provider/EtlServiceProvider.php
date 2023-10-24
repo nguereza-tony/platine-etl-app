@@ -47,10 +47,12 @@ declare(strict_types=1);
 
 namespace Platine\App\Module\Etl\Provider;
 
+use JsonSerializable;
 use Platine\App\Enum\YesNoStatus;
 use Platine\App\Module\Etl\Entity\DataDefinition;
 use Platine\App\Module\Etl\Extractor\RepositoryExtractor;
 use Platine\App\Module\Etl\Helper\EtlHelper;
+use Platine\App\Module\Etl\Helper\FieldTransformer;
 use Platine\App\Module\Etl\Loader\PdfLoader;
 use Platine\App\Module\Etl\Loader\RepositoryLoader;
 use Platine\Container\ContainerInterface;
@@ -62,6 +64,7 @@ use Platine\Etl\Loader\CsvFileLoader;
 use Platine\Etl\Loader\JsonFileLoader;
 use Platine\Framework\Service\ServiceProvider;
 use Platine\PDF\PDF;
+use Platine\Stdlib\Contract\Arrayable;
 use Platine\Template\Template;
 
 
@@ -137,35 +140,34 @@ class EtlServiceProvider extends ServiceProvider
      */
     protected function registerTransformers(): void
     {
-        $this->app->share('entity_import_transformer', function (ContainerInterface $app) {
+        $this->app->share('field_transformer', function (ContainerInterface $app) {
             return function (
                 DataDefinition $definition,
                 array $dataFields,
                 string $path,
                 array $filters = []
             ) {
-                return function ($value, $key, Etl $etl, array $options = []) {
-                    yield $key => $value;
-                };
-            };
-        });
-
-        $this->app->share('entity_transformer', function (ContainerInterface $app) {
-            return function (
-                DataDefinition $definition,
-                array $dataFields,
-                string $path,
-                array $filters = []
-            ) {
-                return function ($value, $key, Etl $etl, array $options = []) {
-                    $data = $value->jsonSerialize();
-                    if (array_key_exists('updated_at', $data) && $value->updated_at !== null) {
-                        $data['updated_at'] = $value->updated_at->format('Y-m-d H:i:s');
+                return function ($value, $key, Etl $etl, array $options = []) use ($dataFields) {
+                    $data = $value;
+                    if ($value instanceof JsonSerializable) {
+                        $data = $value->jsonSerialize();
+                    } elseif ($value instanceof Arrayable) {
+                        $data = $value->toArray();
+                    } else {
+                        $data = (array) $value; // can throw exception
                     }
 
-                    if (array_key_exists('created_at', $data) && $value->created_at !== null) {
-                        $data['created_at'] = $value->created_at->format('Y-m-d H:i:s');
+                    $fields = $dataFields['data'];
+
+                    foreach ($fields as $field => $row) {
+                        if (array_key_exists($field, $data) && $row['transformer'] !== null) {
+                            $callable = sprintf('%s::%s', FieldTransformer::class, $row['transformer']);
+                            if (is_callable($callable)) {
+                                $data[$field] = $callable($data[$field]);
+                            }
+                        }
                     }
+
 
                     yield $key => $data;
                 };

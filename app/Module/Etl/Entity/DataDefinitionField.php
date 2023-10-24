@@ -10,7 +10,6 @@ use Platine\App\Module\Auth\Entity\User;
 use Platine\Orm\Entity;
 use Platine\Orm\Mapper\EntityMapperInterface;
 use Platine\Orm\Query\Query;
-use Platine\Orm\Relation\ForeignKey;
 
 /**
 * @class DataDefinitionField
@@ -40,9 +39,6 @@ class DataDefinitionField extends Entity
          $mapper->relation('enterprise')->belongsTo(Enterprise::class);
          $mapper->relation('user')->belongsTo(User::class);
          $mapper->relation('definition')->belongsTo(DataDefinition::class);
-         $mapper->relation('parent')->belongsTo(DataDefinitionField::class, new ForeignKey([
-            'id' => 'parent_id'
-         ]));
 
          $mapper->filter('enterprise', function (Query $q, $value) {
              $q->where('enterprise_id')->is($value);
@@ -50,10 +46,6 @@ class DataDefinitionField extends Entity
 
          $mapper->filter('user', function (Query $q, $value) {
              $q->where('user_id')->is($value);
-         });
-
-         $mapper->filter('parent', function (Query $q, $value) {
-             $q->where('parent_id')->is($value);
          });
 
          $mapper->filter('definition', function (Query $q, $value) {

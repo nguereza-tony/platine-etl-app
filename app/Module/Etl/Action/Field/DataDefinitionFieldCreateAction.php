@@ -9,9 +9,9 @@ use Platine\App\Helper\ActionHelper;
 use Platine\App\Http\Action\BaseAction;
 use Platine\App\Module\Etl\Entity\DataDefinition;
 use Platine\App\Module\Etl\Entity\DataDefinitionField;
+use Platine\App\Module\Etl\Param\DataDefinitionFieldParam;
 use Platine\App\Module\Etl\Repository\DataDefinitionFieldRepository;
 use Platine\App\Module\Etl\Repository\DataDefinitionRepository;
-use Platine\App\Module\Etl\Param\DataDefinitionFieldParam;
 use Platine\App\Module\Etl\Validator\DataDefinitionFieldValidator;
 use Platine\Http\ResponseInterface;
 
@@ -88,6 +88,8 @@ class DataDefinitionFieldCreateAction extends BaseAction
 
         $formParam = new DataDefinitionFieldParam($param->posts());
         $this->addContext('param', $formParam);
+        $this->addContext('data_definition_field_transformer', $this->statusList->getDataDefinitionFieldTransformer());
+
 
         if ($request->getMethod() === 'GET') {
             $maxPosition = (int) $this->dataDefinitionFieldRepository->query()
@@ -98,7 +100,7 @@ class DataDefinitionFieldCreateAction extends BaseAction
             return $this->viewResponse();
         }
 
-        $validator = new DataDefinitionFieldValidator($formParam, $this->lang);
+        $validator = new DataDefinitionFieldValidator($formParam, $this->lang, $this->statusList);
         if ($validator->validate() === false) {
             $this->addContext('errors', $validator->getErrors());
 
@@ -121,14 +123,14 @@ class DataDefinitionFieldCreateAction extends BaseAction
             $defaultValue = null;
         }
 
+        $transformer = $formParam->getTransformer();
+        if (empty($transformer)) {
+            $transformer = null;
+        }
+
         $column = $formParam->getColumn();
         if (empty($column)) {
             $column = $formParam->getField();
-        }
-
-        $parent = (int) $formParam->getParent();
-        if ($parent <= 0) {
-            $parent = null;
         }
 
         /** @var DataDefinitionField $dataDefinitionField */
@@ -137,8 +139,8 @@ class DataDefinitionFieldCreateAction extends BaseAction
             'field' => $formParam->getField(),
             'position' => (int) $formParam->getPosition(),
             'default_value' => $defaultValue,
-            'parent_id' => $parent,
             'column' => $column,
+            'transformer' => $transformer,
             'data_definition_id' => $id,
             'enterprise_id' => $this->authHelper->getEnterpiseId(),
             'user_id' => $this->authHelper->getUserId(),

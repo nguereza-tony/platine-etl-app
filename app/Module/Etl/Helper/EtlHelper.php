@@ -234,6 +234,7 @@ class EtlHelper
               'display_name' => $row->name,
               'position' => $row->position,
               'default' => $row->default_value,
+              'transformer' => $row->transformer,
             ];
         }
         $dataFields['fields'] = $fieldNames;

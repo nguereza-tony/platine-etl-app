@@ -80,6 +80,7 @@ class DataDefinitionDetailAction extends BaseAction
         $this->addContext('data_definition_loader', $this->statusList->getDataDefinitionLoader());
         $this->addContext('data_definition_extractor', $this->statusList->getDataDefinitionExtractor());
         $this->addContext('data_definition_transformer', $this->statusList->getDataDefinitionTransformer());
+        $this->addContext('data_definition_field_transformer', $this->statusList->getDataDefinitionFieldTransformer());
         $this->addContext('data_definition_filter', $this->statusList->getDataDefinitionFilter());
         $this->addContext('status', $this->statusList->getYesNoStatus());
 

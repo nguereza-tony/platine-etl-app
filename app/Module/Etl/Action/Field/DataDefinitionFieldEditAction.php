@@ -87,6 +87,7 @@ class DataDefinitionFieldEditAction extends BaseAction
                                                                 ->all();
 
         $this->addContext('fields', $definitionFields);
+        $this->addContext('data_definition_field_transformer', $this->statusList->getDataDefinitionFieldTransformer());
 
         $this->addContext('param', (new DataDefinitionFieldParam())->fromEntity($dataDefinitionField));
 
@@ -97,7 +98,7 @@ class DataDefinitionFieldEditAction extends BaseAction
         $formParam = new DataDefinitionFieldParam($param->posts());
         $this->addContext('param', $formParam);
 
-        $validator = new DataDefinitionFieldValidator($formParam, $this->lang);
+        $validator = new DataDefinitionFieldValidator($formParam, $this->lang, $this->statusList);
         if ($validator->validate() === false) {
             $this->addContext('errors', $validator->getErrors());
 
@@ -120,22 +121,22 @@ class DataDefinitionFieldEditAction extends BaseAction
             $defaultValue = null;
         }
 
+        $transformer = $formParam->getTransformer();
+        if (empty($transformer)) {
+            $transformer = null;
+        }
+
         $column = $formParam->getColumn();
         if (empty($column)) {
             $column = $formParam->getField();
-        }
-
-        $parent = (int) $formParam->getParent();
-        if ($parent <= 0) {
-            $parent = null;
         }
 
         $dataDefinitionField->name = $formParam->getName();
         $dataDefinitionField->field = $formParam->getField();
         $dataDefinitionField->position = (int) $formParam->getPosition();
         $dataDefinitionField->default_value = $defaultValue;
-        $dataDefinitionField->parent_id = $parent;
         $dataDefinitionField->column = $column;
+        $dataDefinitionField->transformer = $transformer;
 
         try {
             $this->dataDefinitionFieldRepository->save($dataDefinitionField);

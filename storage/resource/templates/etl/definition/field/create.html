@@ -62,6 +62,24 @@
                                 </div>
                                 
                                 <div class="form-group row">
+                                    <label for="transformer" class="col-md-4 col-form-label">
+                                        Formattage: 
+                                    </label>
+                                    <div class="col-md-8">
+                                        <select 
+                                            name="transformer" 
+                                            class="form-control form-control-sm select2js"
+                                        >
+                                            <option value="">--Aucun--</option>
+                                            {% for p in data_definition_field_transformer %}
+                                                <option {% if param.transformer == p.0 %}selected{% endif %} value="{{ p.0 }}">{{ p.1 }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <span class="ferror">{{ errors.transformer }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
                                     <label for="position" class="col-md-4 col-form-label">
                                         Position: <span class="required">*</span>
                                     </label>
@@ -92,24 +110,6 @@
                                             class="form-control form-control-sm"
                                         />
                                         <span class="ferror">{{ errors.default_value }}</span>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group row">
-                                    <label for="parent" class="col-md-4 col-form-label">
-                                        Parent: 
-                                    </label>
-                                    <div class="col-md-8">
-                                        <select 
-                                            name="parent" 
-                                            class="form-control form-control-sm select2js"
-                                        >
-                                            <option value="">--Aucun--</option>
-                                            {% for p in fields %}
-                                                <option {% if param.parent == p.id %}selected{% endif %} value="{{ p.id }}">{{ p.name }} ({{ p.field }})</option>
-                                            {% endfor %}
-                                        </select>
-                                        <span class="ferror">{{ errors.parent }}</span>
                                     </div>
                                 </div>
                             </div>

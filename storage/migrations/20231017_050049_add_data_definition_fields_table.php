@@ -28,6 +28,9 @@ class AddDataDefinitionFieldsTable20231017050049 extends AbstractMigration
              $table->string('column')
                  ->description('The database column if any');
              
+             $table->string('transformer')
+                 ->description('The transformer to use');
+             
              $table->integer('position')
                  ->description('The field position (sort order)')
                  ->defaultValue(1)
@@ -36,9 +39,6 @@ class AddDataDefinitionFieldsTable20231017050049 extends AbstractMigration
             $table->string('default_value')
                  ->description('The field default value');
              
-            $table->integer('parent_id')
-                ->description('The field parent');
-
             $table->integer('data_definition_id')
                 ->description('The data definition')
                  ->notNull();
@@ -55,10 +55,6 @@ class AddDataDefinitionFieldsTable20231017050049 extends AbstractMigration
 
             $table->foreign('data_definition_id')
                 ->references('data_definitions', 'id')
-                ->onDelete('NO ACTION');
-            
-            $table->foreign('parent_id')
-                ->references('data_definition_fields', 'id')
                 ->onDelete('NO ACTION');
             
             $table->foreign('enterprise_id')

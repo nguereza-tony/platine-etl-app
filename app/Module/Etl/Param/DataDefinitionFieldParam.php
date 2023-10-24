@@ -33,6 +33,12 @@ class DataDefinitionFieldParam extends AppParam
     protected string $column = '';
 
     /**
+    * The transformer field
+    * @var string
+    */
+    protected string $transformer = '';
+
+    /**
     * The position field
     * @var string
     */
@@ -45,13 +51,6 @@ class DataDefinitionFieldParam extends AppParam
     protected string $defaultValue = '';
 
     /**
-    * The parent field
-    * @var string
-    */
-    protected string $parent = '';
-
-
-    /**
     * @param TEntity $entity
     * @return $this
     */
@@ -60,9 +59,9 @@ class DataDefinitionFieldParam extends AppParam
         $this->field = $entity->field;
         $this->name = $entity->name;
         $this->column = (string) $entity->column;
+        $this->transformer = (string) $entity->transformer;
         $this->position = (string) $entity->position;
         $this->defaultValue = (string) $entity->default_value;
-        $this->parent = (string) $entity->parent_id;
 
         return $this;
     }
@@ -106,6 +105,15 @@ class DataDefinitionFieldParam extends AppParam
         return $this->name;
     }
 
+    /**
+    * Return the transformer value
+    * @return string
+    */
+    public function getTransformer(): string
+    {
+        return $this->transformer;
+    }
+
    /**
     * Return the position value
     * @return string
@@ -123,16 +131,6 @@ class DataDefinitionFieldParam extends AppParam
     {
         return $this->defaultValue;
     }
-
-   /**
-    * Return the parent value
-    * @return string
-    */
-    public function getParent(): string
-    {
-        return $this->parent;
-    }
-
 
     /**
     * Set the field value
@@ -158,6 +156,19 @@ class DataDefinitionFieldParam extends AppParam
         return $this;
     }
 
+    /**
+    * Set the transformer value
+    * @param string $transformer
+    * @return $this
+    */
+    public function setTransformer(string $transformer): self
+    {
+        $this->transformer = $transformer;
+
+        return $this;
+    }
+
+
    /**
     * Set the position value
     * @param string $position
@@ -178,18 +189,6 @@ class DataDefinitionFieldParam extends AppParam
     public function setDefaultValue(string $defaultValue): self
     {
         $this->defaultValue = $defaultValue;
-
-        return $this;
-    }
-
-   /**
-    * Set the parent value
-    * @param string $parent
-    * @return $this
-    */
-    public function setParent(string $parent): self
-    {
-        $this->parent = $parent;
 
         return $this;
     }

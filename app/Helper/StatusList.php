@@ -6,10 +6,10 @@ namespace Platine\App\Helper;
 
 use Platine\App\Enum\YesNoStatus;
 use Platine\App\Filter\UserFilter;
-use Platine\App\Module\Etl\Repository\DataDefinitionRepository;
 use Platine\App\Model\Repository\DemoRepository;
 use Platine\App\Module\Etl\Enum\DataDefinitionDirection;
 use Platine\App\Module\Etl\Enum\DataDefinitionImportStatus;
+use Platine\App\Module\Etl\Repository\DataDefinitionRepository;
 use Platine\Framework\Auth\Repository\UserRepository;
 use Platine\Lang\Lang;
 
@@ -134,8 +134,21 @@ class StatusList
     public function getDataDefinitionTransformer(): array
     {
         return [
-            'entity_import_transformer' => $this->lang->tr('Formattage entité (import)'),
-            'entity_transformer' => $this->lang->tr('Formattage (Entité)'),
+            'field_transformer' => $this->lang->tr('Formattage (Champs)'),
+        ];
+    }
+
+    /**
+     *
+     * @return array<string, mixed>
+     */
+    public function getDataDefinitionFieldTransformer(): array
+    {
+        return [
+            'upper' => $this->lang->tr('Majuscule'),
+            'datetime' => $this->lang->tr('Date et heure'),
+            'date' => $this->lang->tr('Date'),
+            'money' => $this->lang->tr('Montant'),
         ];
     }
 

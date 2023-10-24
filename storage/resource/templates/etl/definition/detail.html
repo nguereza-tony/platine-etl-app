@@ -103,9 +103,9 @@
                                                 <th>Attribut</th>
                                                 <th>Description</th>
                                                 <th>Colonne</th>
+                                                <th>Formattage</th>
                                                 <th>Position</th>
                                                 <th>Valeur par défaut</th>
-                                                <th>Parent</th>
                                                 <th>Date de création</th>
                                                 <th>Action</th>
                                             </tr>
@@ -116,9 +116,9 @@
                                                     <td><a class="btn btn-xs btn-link" href="{% route_url data_definition_field_edit id:a.id %}">{{ a.field }}</a></td>
                                                     <td>{{ a.name }}</td>
                                                     <td>{{ a.column }}</td>
+                                                    <td>{{ data_definition_field_transformer[a.transformer] }}</td>
                                                     <td>{{ a.position }}</td>
                                                     <td>{{ a.default_value }}</td>
-                                                    <td>{{ a.parent.name }}</td>
                                                     <td>{{ a.created_at|date:"d/m/Y H:i:s" }}</td>
                                                     <td  class="actions">
                                                         <a href="{% route_url data_definition_field_delete id:a.id %}" class="btn btn-xs btn-icon btn-pill btn-danger" data-text-confirm="Etes-vous sûr de vouloir supprimer cet élément ?">
