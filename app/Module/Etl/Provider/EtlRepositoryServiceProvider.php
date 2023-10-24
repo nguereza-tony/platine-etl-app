@@ -50,6 +50,7 @@ namespace Platine\App\Module\Etl\Provider;
 use Platine\App\Module\Etl\Repository\DataDefinitionFieldRepository;
 use Platine\App\Module\Etl\Repository\DataDefinitionImportRepository;
 use Platine\App\Module\Etl\Repository\DataDefinitionRepository;
+use Platine\App\Module\Etl\Repository\DataDefinitionUserRepository;
 use Platine\Framework\Service\ServiceProvider;
 
 /**
@@ -64,6 +65,7 @@ class EtlRepositoryServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(DataDefinitionRepository::class);
+        $this->app->bind(DataDefinitionUserRepository::class);
         $this->app->bind(DataDefinitionFieldRepository::class);
         $this->app->bind(DataDefinitionImportRepository::class);
     }

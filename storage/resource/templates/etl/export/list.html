@@ -12,7 +12,7 @@
                 <table class="table table-hover table-sm table-bordered">
                     <thead>
                         <tr>
-                            <th>Nom</th>
+                            <th>Définition</th>
                             <th>Description</th>
                             <th>Modèle (entité)</th>
                             <th>Source</th>
@@ -23,7 +23,7 @@
                     <tbody>
                         {% for a in list %}
                             <tr>
-                                <td>{{ a.name }}</td>
+                                <td><a class="btn btn-xs btn-link" href="{% route_url data_definition_detail id:a.id %}">{{ a.name }}</a></td>
                                 <td>{{ a.description }}</td>
                                 <td>{{ data_definition_repository[a.model] }}</td>
                                 <td>{{ data_definition_extractor[a.extractor] }}</td>

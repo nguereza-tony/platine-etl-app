@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Platine\App\Module\Etl\Action\Export;
 
-use Platine\App\Module\Etl\Enum\DataDefinitionDirection;
 use Platine\App\Enum\YesNoStatus;
 use Platine\App\Helper\ActionHelper;
-use Platine\App\Module\Etl\Helper\EtlHelper;
 use Platine\App\Http\Action\BaseAction;
+use Platine\App\Module\Etl\Enum\DataDefinitionDirection;
+use Platine\App\Module\Etl\Helper\EtlHelper;
 use Platine\App\Module\Etl\Repository\DataDefinitionFieldRepository;
 use Platine\App\Module\Etl\Repository\DataDefinitionRepository;
+use Platine\App\Module\Etl\Repository\DataDefinitionUserRepository;
 use Platine\Http\ResponseInterface;
+use Platine\Stdlib\Helper\Arr;
 
 /**
 * @class DataDefinitionExportListAction
@@ -44,22 +46,31 @@ class DataDefinitionExportListAction extends BaseAction
     protected EtlHelper $dataDefinitionHelper;
 
     /**
+    * The DataDefinitionUserRepository instance
+    * @var DataDefinitionUserRepository
+    */
+    protected DataDefinitionUserRepository $dataDefinitionUserRepository;
+
+    /**
     * Create new instance
     * @param ActionHelper $actionHelper
     * @param DataDefinitionRepository $dataDefinitionRepository
     * @param DataDefinitionFieldRepository $dataDefinitionFieldRepository
+    * @param DataDefinitionUserRepository $dataDefinitionUserRepository
     * @param EtlHelper $dataDefinitionHelper
     */
     public function __construct(
         ActionHelper $actionHelper,
         DataDefinitionRepository $dataDefinitionRepository,
         DataDefinitionFieldRepository $dataDefinitionFieldRepository,
+        DataDefinitionUserRepository $dataDefinitionUserRepository,
         EtlHelper $dataDefinitionHelper
     ) {
         parent::__construct($actionHelper);
         $this->dataDefinitionRepository = $dataDefinitionRepository;
         $this->dataDefinitionFieldRepository = $dataDefinitionFieldRepository;
         $this->dataDefinitionHelper = $dataDefinitionHelper;
+        $this->dataDefinitionUserRepository = $dataDefinitionUserRepository;
     }
 
     /**
@@ -70,12 +81,22 @@ class DataDefinitionExportListAction extends BaseAction
         $this->setView('etl/export/list');
         $param = $this->param;
 
-        $totalItems = $this->dataDefinitionRepository->query()
-                                            ->filter([
-                                                'status' => YesNoStatus::YES,
-                                                'direction' => DataDefinitionDirection::OUT
-                                            ])
-                                            ->count('id');
+        $definitionList = $this->dataDefinitionUserRepository->query()
+                                                       ->filter(['user' => $this->authHelper->getUserId()])
+                                                        ->all(['data_definition_id'], false);
+
+        $definitionsId = Arr::getColumn($definitionList, ['data_definition_id']);
+
+        $totalItems = 0;
+        if (count($definitionsId) > 0) {
+            $totalItems = $this->dataDefinitionRepository->query()
+                                                ->filter([
+                                                    'status' => YesNoStatus::YES,
+                                                    'direction' => DataDefinitionDirection::OUT,
+                                                    'definitions' => $definitionsId
+                                                ])
+                                                ->count('id');
+        }
 
         $this->addContext('total_items', $totalItems);
 
@@ -86,13 +107,17 @@ class DataDefinitionExportListAction extends BaseAction
         $limit = $this->pagination->getItemsPerPage();
         $offset = $this->pagination->getOffset();
 
-        $results = $this->dataDefinitionRepository->limit($offset, $limit)
+        $results = [];
+        if (count($definitionsId) > 0) {
+            $results = $this->dataDefinitionRepository->limit($offset, $limit)
                                                     ->filters([
                                                         'status' => YesNoStatus::YES,
-                                                        'direction' => DataDefinitionDirection::OUT
+                                                        'direction' => DataDefinitionDirection::OUT,
+                                                        'definitions' => $definitionsId
                                                     ])
                                                     ->orderBy(['name'])
                                                     ->all();
+        }
 
         $this->addContext('list', $results);
         $this->addContext('status', $this->statusList->getYesNoStatus());

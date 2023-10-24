@@ -53,6 +53,7 @@ use Platine\App\Module\Etl\Action\DataDefinitionDeleteAction;
 use Platine\App\Module\Etl\Action\DataDefinitionDetailAction;
 use Platine\App\Module\Etl\Action\DataDefinitionEditAction;
 use Platine\App\Module\Etl\Action\DataDefinitionListAction;
+use Platine\App\Module\Etl\Action\DataDefinitionManageUsersAction;
 use Platine\App\Module\Etl\Action\Export\DataDefinitionExportListAction;
 use Platine\App\Module\Etl\Action\Export\DataDefinitionExportProcessAction;
 use Platine\App\Module\Etl\Action\Field\DataDefinitionFieldCreateAction;
@@ -83,6 +84,7 @@ class EtlActionServiceProvider extends ServiceProvider
         $this->app->bind(DataDefinitionEditAction::class);
         $this->app->bind(DataDefinitionDeleteAction::class);
         $this->app->bind(DataDefinitionCopyAction::class);
+        $this->app->bind(DataDefinitionManageUsersAction::class);
         $this->app->bind(DataDefinitionFieldCreateAction::class);
         $this->app->bind(DataDefinitionFieldDeleteAction::class);
         $this->app->bind(DataDefinitionFieldEditAction::class);

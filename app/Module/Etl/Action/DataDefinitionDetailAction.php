@@ -75,6 +75,7 @@ class DataDefinitionDetailAction extends BaseAction
         }
 
         $this->addContext('definition', $dataDefinition);
+        $this->addContext('users', $dataDefinition->users);
         $this->addContext('direction', $this->statusList->getDataDefinitionDirection());
         $this->addContext('data_definition_repository', $this->statusList->getDataDefinitionRepository());
         $this->addContext('data_definition_loader', $this->statusList->getDataDefinitionLoader());
@@ -94,6 +95,7 @@ class DataDefinitionDetailAction extends BaseAction
         $this->addSidebar('', 'Nouvelle définition', 'data_definition_create');
         $this->addSidebar('', 'Copier', 'data_definition_copy', ['id' => $id], ['confirm' => true]);
         $this->addSidebar('', 'Modifier', 'data_definition_edit', ['id' => $id]);
+        $this->addSidebar('', 'Gestion utilisateurs', 'data_definition_manage_users', ['id' => $id]);
         $this->addSidebar('', 'Ajouter un attribut', 'data_definition_field_create', ['id' => $id]);
         if (count($definitionFields) === 0) {
             $this->addSidebar('', 'Supprimer', 'data_definition_delete', ['id' => $id], ['confirm' => true]);

@@ -60,6 +60,7 @@ use Platine\App\Http\Action\HomeAction;
 use Platine\App\Model\Repository\DemoRepository;
 use Platine\App\Model\Repository\FileRepository;
 use Platine\App\Module\Auth\Audit\SessionUser;
+use Platine\App\Module\Auth\Repository\UserRepository;
 use Platine\Framework\Audit\AuditUserInterface;
 use Platine\Framework\Helper\Flash;
 use Platine\Framework\Service\ServiceProvider;
@@ -82,6 +83,7 @@ class AppServiceProvider extends ServiceProvider
         /**
          * Repositories
          */
+        $this->app->bind(UserRepository::class);
         $this->app->bind(FileRepository::class);
         $this->app->bind(DemoRepository::class);
 

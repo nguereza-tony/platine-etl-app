@@ -36,7 +36,8 @@ class DataDefinition extends Entity
          $entityHelper = app(EntityHelper::class);
          $entityHelper->subscribeEvents($mapper);
 
-         $mapper->relation('enterprise')->belongsTo(Enterprise::class);
+         $mapper->relation('users')->shareMany(User::class);
+        $mapper->relation('enterprise')->belongsTo(Enterprise::class);
          $mapper->relation('user')->belongsTo(User::class);
 
          $mapper->filter('enterprise', function (Query $q, $value) {
@@ -58,5 +59,37 @@ class DataDefinition extends Entity
          $mapper->filter('header', function (Query $q, $value) {
              $q->where('header')->is($value);
          });
+
+         $mapper->filter('definitions', function (Query $q, $value) {
+             $q->where('id')->in($value);
+         });
+    }
+
+    /**
+     * Set users
+     * @param User[] $users
+     * @return $this
+     */
+    public function setUsers(array $users): self
+    {
+        foreach ($users as $user) {
+            $this->mapper()->link('users', $user);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove users
+     * @param User[] $users
+     * @return $this
+     */
+    public function removeUsers(array $users): self
+    {
+        foreach ($users as $user) {
+            $this->mapper()->unlink('users', $user);
+        }
+
+        return $this;
     }
 }

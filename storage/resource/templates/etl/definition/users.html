@@ -1,0 +1,56 @@
+{% extends "main" %}
+{% block body %}
+<div class="card mb-4">
+    <div class="card-header bg-white font-weight-bold page-header">
+        Gestion des utilisateurs pour [{{ definition.name }}]
+    </div>
+    <div class="card-body">
+        {% if users.size > 0 %}
+            <form method="post" action="">
+                {% csrf %}
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" class="list-actions-checkbox" /></th>
+                                <th>Identifiant</th>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>E-mail</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for u in users %}
+                                <tr>
+                                    <td>
+                                        <input 
+                                            {% if param.users contains u.id %}checked{% endif %}
+                                            name="users[]" 
+                                            value="{{ u.id }}"
+                                            type="checkbox" 
+                                            class="list-action" 
+                                     />
+                                    </td>
+                                    <td>{{ u.username }}</td>
+                                    <td>{{ u.lastname }}</td>
+                                    <td>{{ u.firstname }}</td>
+                                    <td>{{ u.email }}</td>
+                                    <td>{{ u.role }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <br />
+                <p class="text-right">
+                    <input type="submit" name="delete" value="Enregistrer" class="btn btn-primary"/>
+                    <a href="{% route_url data_definition_detail id:definition.id %}" class="btn btn-dark">Annuler</a>
+                 </p>
+            </form>
+        {% else %}
+            <p class="alert alert-info">Aucune donnée disponible à afficher</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}<!-- end block body -->

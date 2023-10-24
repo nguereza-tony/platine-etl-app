@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Platine\App\Module\Etl\Action\Export;
 
-use Platine\App\Module\Etl\Enum\DataDefinitionDirection;
 use Platine\App\Enum\YesNoStatus;
 use Platine\App\Helper\ActionHelper;
-use Platine\App\Module\Etl\Helper\EtlHelper;
 use Platine\App\Helper\Filter;
 use Platine\App\Http\Action\BaseAction;
 use Platine\App\Module\Etl\Entity\DataDefinition;
+use Platine\App\Module\Etl\Enum\DataDefinitionDirection;
+use Platine\App\Module\Etl\Helper\EtlHelper;
 use Platine\App\Module\Etl\Repository\DataDefinitionFieldRepository;
 use Platine\App\Module\Etl\Repository\DataDefinitionRepository;
+use Platine\App\Module\Etl\Repository\DataDefinitionUserRepository;
 use Platine\Container\ContainerInterface;
 use Platine\Framework\Http\Response\FileResponse;
 use Platine\Http\ResponseInterface;
+use Platine\Stdlib\Helper\Arr;
 use Throwable;
 
 /**
@@ -55,11 +57,18 @@ class DataDefinitionExportProcessAction extends BaseAction
     protected ContainerInterface $container;
 
     /**
+    * The DataDefinitionUserRepository instance
+    * @var DataDefinitionUserRepository
+    */
+    protected DataDefinitionUserRepository $dataDefinitionUserRepository;
+
+    /**
     * Create new instance
     * @param ActionHelper $actionHelper
     * @param DataDefinitionRepository $dataDefinitionRepository
     * @param DataDefinitionFieldRepository $dataDefinitionFieldRepository
     * @param EtlHelper $dataDefinitionHelper
+    * @param DataDefinitionUserRepository $dataDefinitionUserRepository
     * @param ContainerInterface $container
     */
     public function __construct(
@@ -67,6 +76,7 @@ class DataDefinitionExportProcessAction extends BaseAction
         DataDefinitionRepository $dataDefinitionRepository,
         DataDefinitionFieldRepository $dataDefinitionFieldRepository,
         EtlHelper $dataDefinitionHelper,
+        DataDefinitionUserRepository $dataDefinitionUserRepository,
         ContainerInterface $container
     ) {
         parent::__construct($actionHelper);
@@ -74,6 +84,7 @@ class DataDefinitionExportProcessAction extends BaseAction
         $this->dataDefinitionFieldRepository = $dataDefinitionFieldRepository;
         $this->dataDefinitionHelper = $dataDefinitionHelper;
         $this->container = $container;
+        $this->dataDefinitionUserRepository = $dataDefinitionUserRepository;
     }
 
     /**
@@ -85,14 +96,24 @@ class DataDefinitionExportProcessAction extends BaseAction
         $param = $this->param;
         $request = $this->request;
 
+        $definitionList = $this->dataDefinitionUserRepository->query()
+                                                       ->filter(['user' => $this->authHelper->getUserId()])
+                                                        ->all(['data_definition_id'], false);
+
+        $definitionsId = Arr::getColumn($definitionList, ['data_definition_id']);
+
         $id = (int) $request->getAttribute('id');
 
-        /** @var DataDefinition|null $definition */
-        $definition = $this->dataDefinitionRepository->filters([
+        $definition = null;
+        if (count($definitionsId) > 0) {
+            /** @var DataDefinition|null $definition */
+            $definition = $this->dataDefinitionRepository->filters([
                                                         'status' => YesNoStatus::YES,
-                                                        'direction' => DataDefinitionDirection::OUT
+                                                        'direction' => DataDefinitionDirection::OUT,
+                                                        'definitions' => $definitionsId,
                                                     ])
                                                     ->find($id);
+        }
 
         if ($definition === null) {
             $this->flash->setError($this->lang->tr('Cet enregistrement n\'existe pas'));

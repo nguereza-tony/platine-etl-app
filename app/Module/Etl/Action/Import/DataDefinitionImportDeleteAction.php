@@ -72,7 +72,10 @@ class DataDefinitionImportDeleteAction extends BaseAction
         $id = (int) $request->getAttribute('id');
 
         /** @var DataDefinitionImport|null $dataDefinitionImport */
-        $dataDefinitionImport = $this->dataDefinitionImportRepository->find($id);
+        $dataDefinitionImport = $this->dataDefinitionImportRepository->filters([
+                                                                       'user' => $this->authHelper->getUserId(),
+                                                                     ])
+                                                                     ->find($id);
 
         if ($dataDefinitionImport === null) {
             $this->flash->setError($this->lang->tr('Cet enregistrement n\'existe pas'));

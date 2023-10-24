@@ -53,6 +53,7 @@ use Platine\App\Module\Etl\Action\DataDefinitionDeleteAction;
 use Platine\App\Module\Etl\Action\DataDefinitionDetailAction;
 use Platine\App\Module\Etl\Action\DataDefinitionEditAction;
 use Platine\App\Module\Etl\Action\DataDefinitionListAction;
+use Platine\App\Module\Etl\Action\DataDefinitionManageUsersAction;
 use Platine\App\Module\Etl\Action\Export\DataDefinitionExportListAction;
 use Platine\App\Module\Etl\Action\Export\DataDefinitionExportProcessAction;
 use Platine\App\Module\Etl\Action\Field\DataDefinitionFieldCreateAction;
@@ -93,6 +94,7 @@ class EtlRouteServiceProvider extends ServiceProvider
                 $router->get('/copy/{id}', DataDefinitionCopyAction::class, 'data_definition_copy');
                 $router->add('/create', DataDefinitionCreateAction::class, ['GET', 'POST'], 'data_definition_create');
                 $router->add('/update/{id}', DataDefinitionEditAction::class, ['GET', 'POST'], 'data_definition_edit');
+                $router->add('/users/{id}', DataDefinitionManageUsersAction::class, ['GET', 'POST'], 'data_definition_manage_users');
 
                 // Fields
                 $router->group('/fields', function (Router $router) {

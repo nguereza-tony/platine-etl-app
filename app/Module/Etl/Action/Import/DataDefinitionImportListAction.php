@@ -75,7 +75,7 @@ class DataDefinitionImportListAction extends BaseAction
         $results = $this->dataDefinitionImportRepository->limit($offset, $limit)
                                                     ->with(['file', 'definition'])
                                                     ->filters($this->filters)
-                                                    ->orderBy(['id'], 'DESC')
+                                                    ->orderBy(['created_at'], 'DESC')
                                                     ->all();
 
         $this->addContext('list', $results);
@@ -85,5 +85,13 @@ class DataDefinitionImportListAction extends BaseAction
         $this->addSidebar('', 'Définitions', 'data_definition_list');
 
         return $this->viewResponse();
+    }
+
+    /**
+    * {@inheritdoc}
+    */
+    protected function handleFilterDefault(): void
+    {
+        $this->filters['user'] = $this->authHelper->getUserId();
     }
 }

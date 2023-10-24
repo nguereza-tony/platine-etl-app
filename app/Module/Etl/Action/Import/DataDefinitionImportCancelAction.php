@@ -74,7 +74,8 @@ class DataDefinitionImportCancelAction extends BaseAction
 
         /** @var DataDefinitionImport|null $dataDefinitionImport */
         $dataDefinitionImport = $this->dataDefinitionImportRepository->filters([
-                                                                        'status' => DataDefinitionImportStatus::PENDING
+                                                                        'status' => DataDefinitionImportStatus::PENDING,
+                                                                        'user' => $this->authHelper->getUserId(),
                                                                     ])
                                                                      ->find($id);
 

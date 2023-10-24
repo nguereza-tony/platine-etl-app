@@ -5,18 +5,20 @@ declare(strict_types=1);
 namespace Platine\App\Module\Etl\Action\Import;
 
 use Exception;
-use Platine\App\Module\Etl\Enum\DataDefinitionDirection;
-use Platine\App\Module\Etl\Enum\DataDefinitionImportStatus;
 use Platine\App\Enum\YesNoStatus;
 use Platine\App\Exception\AppUploadException;
 use Platine\App\Helper\ActionHelper;
 use Platine\App\Http\Action\BaseAction;
+use Platine\App\Module\Etl\Enum\DataDefinitionDirection;
+use Platine\App\Module\Etl\Enum\DataDefinitionImportStatus;
+use Platine\App\Module\Etl\Param\DataDefinitionImportParam;
 use Platine\App\Module\Etl\Repository\DataDefinitionImportRepository;
 use Platine\App\Module\Etl\Repository\DataDefinitionRepository;
-use Platine\App\Module\Etl\Param\DataDefinitionImportParam;
+use Platine\App\Module\Etl\Repository\DataDefinitionUserRepository;
 use Platine\App\Module\Etl\Validator\DataDefinitionImportValidator;
 use Platine\Database\Connection;
 use Platine\Http\ResponseInterface;
+use Platine\Stdlib\Helper\Arr;
 
 /**
 * @class DataDefinitionImportCreateAction
@@ -49,21 +51,30 @@ class DataDefinitionImportCreateAction extends BaseAction
     protected Connection $connection;
 
     /**
+    * The DataDefinitionUserRepository instance
+    * @var DataDefinitionUserRepository
+    */
+    protected DataDefinitionUserRepository $dataDefinitionUserRepository;
+
+    /**
     * Create new instance
     * @param ActionHelper $actionHelper
     * @param DataDefinitionRepository $dataDefinitionRepository
     * @param DataDefinitionImportRepository $dataDefinitionImportRepository
+    * @param DataDefinitionUserRepository $dataDefinitionUserRepository
     * @param Connection $connection
     */
     public function __construct(
         ActionHelper $actionHelper,
         DataDefinitionRepository $dataDefinitionRepository,
         DataDefinitionImportRepository $dataDefinitionImportRepository,
+        DataDefinitionUserRepository $dataDefinitionUserRepository,
         Connection $connection
     ) {
         parent::__construct($actionHelper);
         $this->dataDefinitionRepository = $dataDefinitionRepository;
         $this->dataDefinitionImportRepository = $dataDefinitionImportRepository;
+        $this->dataDefinitionUserRepository = $dataDefinitionUserRepository;
         $this->connection = $connection;
     }
 
@@ -81,12 +92,20 @@ class DataDefinitionImportCreateAction extends BaseAction
 
         $this->addContext('status', $this->statusList->getDataDefinitionImportStatus());
 
-        $definitions = $this->dataDefinitionRepository->filters([
+        $definitionList = $this->dataDefinitionUserRepository->query()
+                                                       ->filter(['user' => $this->authHelper->getUserId()])
+                                                        ->all(['data_definition_id'], false);
+
+        $definitionsId = Arr::getColumn($definitionList, ['data_definition_id']);
+        $definitions = [];
+        if (count($definitionsId) > 0) {
+            $definitions = $this->dataDefinitionRepository->filters([
                                                         'status' => YesNoStatus::YES,
-                                                        'direction' => DataDefinitionDirection::IN
+                                                        'direction' => DataDefinitionDirection::IN,
                                                     ])
                                                     ->orderBy(['name'])
-                                                    ->all();
+                                                    ->findAll(...$definitionsId);
+        }
 
         if (count($definitions) === 0) {
             $this->flash->setError($this->lang->tr('Aucune définition des données disponibles pour importation'));
