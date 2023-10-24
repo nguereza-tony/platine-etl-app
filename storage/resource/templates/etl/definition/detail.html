@@ -106,7 +106,7 @@
                                                 <th>Formattage</th>
                                                 <th>Position</th>
                                                 <th>Valeur par défaut</th>
-                                                <th>Date de création</th>
+                                                <th>Paramètres</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -119,7 +119,7 @@
                                                     <td>{{ data_definition_field_transformer[a.transformer] }}</td>
                                                     <td>{{ a.position }}</td>
                                                     <td>{{ a.default_value }}</td>
-                                                    <td>{{ a.created_at|date:"d/m/Y H:i:s" }}</td>
+                                                    <td>{{ a.parameters }}</td>
                                                     <td  class="actions">
                                                         <a href="{% route_url data_definition_field_delete id:a.id %}" class="btn btn-xs btn-icon btn-pill btn-danger" data-text-confirm="Etes-vous sûr de vouloir supprimer cet élément ?">
                                                             <i class="fa fa-fw fa-trash"></i>

@@ -163,7 +163,7 @@ class EtlServiceProvider extends ServiceProvider
                         if (array_key_exists($field, $data) && $row['transformer'] !== null) {
                             $callable = sprintf('%s::%s', FieldTransformer::class, $row['transformer']);
                             if (is_callable($callable)) {
-                                $data[$field] = $callable($data[$field]);
+                                $data[$field] = $callable($data[$field], ...$row['parameters']);
                             }
                         }
                     }

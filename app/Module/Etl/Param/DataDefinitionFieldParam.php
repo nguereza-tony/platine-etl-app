@@ -51,6 +51,12 @@ class DataDefinitionFieldParam extends AppParam
     protected string $defaultValue = '';
 
     /**
+    * The parameters field
+    * @var string
+    */
+    protected string $parameters = '';
+
+    /**
     * @param TEntity $entity
     * @return $this
     */
@@ -59,12 +65,34 @@ class DataDefinitionFieldParam extends AppParam
         $this->field = $entity->field;
         $this->name = $entity->name;
         $this->column = (string) $entity->column;
+        $this->parameters = (string) $entity->parameters;
         $this->transformer = (string) $entity->transformer;
         $this->position = (string) $entity->position;
         $this->defaultValue = (string) $entity->default_value;
 
         return $this;
     }
+
+    /**
+     *
+     * @return string
+     */
+    public function getParameters(): string
+    {
+        return $this->parameters;
+    }
+
+    /**
+     *
+     * @param string $parameters
+     * @return $this
+     */
+    public function setParameters(string $parameters): self
+    {
+        $this->parameters = $parameters;
+        return $this;
+    }
+
 
     /**
      *

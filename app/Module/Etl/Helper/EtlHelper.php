@@ -235,6 +235,7 @@ class EtlHelper
               'position' => $row->position,
               'default' => $row->default_value,
               'transformer' => $row->transformer,
+              'parameters' => $row->parameters !== null ? (array)explode('|', $row->parameters) : [],
             ];
         }
         $dataFields['fields'] = $fieldNames;

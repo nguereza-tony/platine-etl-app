@@ -126,6 +126,11 @@ class DataDefinitionFieldEditAction extends BaseAction
             $transformer = null;
         }
 
+        $parameters = $formParam->getParameters();
+        if (strlen($parameters) === 0 || $transformer === null) {
+            $parameters = null;
+        }
+
         $column = $formParam->getColumn();
         if (empty($column)) {
             $column = $formParam->getField();
@@ -136,6 +141,7 @@ class DataDefinitionFieldEditAction extends BaseAction
         $dataDefinitionField->position = (int) $formParam->getPosition();
         $dataDefinitionField->default_value = $defaultValue;
         $dataDefinitionField->column = $column;
+        $dataDefinitionField->parameters = $parameters;
         $dataDefinitionField->transformer = $transformer;
 
         try {

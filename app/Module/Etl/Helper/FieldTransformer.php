@@ -62,12 +62,24 @@ class FieldTransformer
     /**
      * Return the formatted money/amount
      * @param float|string|int $param
+     * @param int|mixed $decimal
+     * @param string|mixed $decimalSeparator
+     * @param string|mixed $separator
      * @return string
      */
-    public static function money($param): string
-    {
+    public static function money(
+        $param,
+        $decimal = 2,
+        $decimalSeparator = '.',
+        $separator = ','
+    ): string {
         if (is_numeric($param)) {
-            return number_format((float) $param);
+            return number_format(
+                (float) $param,
+                (int) $decimal,
+                (string)$decimalSeparator,
+                (string)$separator
+            );
         }
 
         return $param;

@@ -60,6 +60,7 @@ class DataDefinitionFieldValidator extends AbstractValidator
         $this->addData('transformer', $this->param->getTransformer());
         $this->addData('position', $this->param->getPosition());
         $this->addData('default_value', $this->param->getDefaultValue());
+        $this->addData('parameters', $this->param->getParameters());
     }
 
     /**
@@ -95,6 +96,10 @@ class DataDefinitionFieldValidator extends AbstractValidator
         $this->addRules('transformer', [
             new MinLength(2),
             new InList(array_keys($this->statusList->getDataDefinitionFieldTransformer())),
+        ]);
+
+        $this->addRules('parameters', [
+            new MinLength(1),
         ]);
     }
 }

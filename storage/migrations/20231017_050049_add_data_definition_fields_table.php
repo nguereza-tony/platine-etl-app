@@ -31,6 +31,9 @@ class AddDataDefinitionFieldsTable20231017050049 extends AbstractMigration
              $table->string('transformer')
                  ->description('The transformer to use');
              
+             $table->string('parameters')
+                 ->description('The transformer parameters pipe (|) separated');
+             
              $table->integer('position')
                  ->description('The field position (sort order)')
                  ->defaultValue(1)

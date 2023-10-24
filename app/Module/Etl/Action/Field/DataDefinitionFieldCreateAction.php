@@ -119,13 +119,18 @@ class DataDefinitionFieldCreateAction extends BaseAction
         }
 
         $defaultValue = $formParam->getDefaultValue();
-        if (empty($defaultValue)) {
+        if (strlen($defaultValue) === 0) {
             $defaultValue = null;
         }
 
         $transformer = $formParam->getTransformer();
         if (empty($transformer)) {
             $transformer = null;
+        }
+
+        $parameters = $formParam->getParameters();
+        if (strlen($parameters) === 0 || $transformer === null) {
+            $parameters = null;
         }
 
         $column = $formParam->getColumn();
@@ -141,6 +146,7 @@ class DataDefinitionFieldCreateAction extends BaseAction
             'default_value' => $defaultValue,
             'column' => $column,
             'transformer' => $transformer,
+            'parameters' => $parameters,
             'data_definition_id' => $id,
             'enterprise_id' => $this->authHelper->getEnterpiseId(),
             'user_id' => $this->authHelper->getUserId(),
