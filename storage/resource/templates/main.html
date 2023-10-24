@@ -39,14 +39,22 @@
                             <a href="{% route_url home %}"><i class="fa fa-fw fa-home"></i> Tableau de bord</a>
                         </li>
                         <li>
-                            <a href="{% route_url data_definition_list %}"><i class="fa fa-fw fa-th"></i> Définitions des données</a>
+                            <a href="#etl" data-toggle="collapse">
+                                <i class="fa fa-fw fa-th"></i> ETL
+                            </a>
+                            <ul id="etl" class="list-unstyled collapse">
+                                <li>
+                                    <a href="{% route_url data_definition_list %}"><i class="fa fa-fw fa-database"></i> Définitions des données</a>
+                                </li>
+                                <li>
+                                    <a href="{% route_url data_definition_import_list %}"><i class="fa fa-fw fa-upload"></i> Importer les données</a>
+                                </li>
+                                <li>
+                                    <a href="{% route_url data_definition_export_list %}"><i class="fa fa-fw fa-download"></i> Exporter les données</a>
+                                </li>
+                            </ul>
                         </li>
-                        <li>
-                            <a href="{% route_url data_definition_import_list %}"><i class="fa fa-fw fa-upload"></i> Importer les données</a>
-                        </li>
-                        <li>
-                            <a href="{% route_url data_definition_export_list %}"><i class="fa fa-fw fa-download"></i> Exporter les données</a>
-                        </li>
+                        
                     </ul>
                 </div>
             {% endblock %} <!-- end block menu -->
