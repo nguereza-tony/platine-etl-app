@@ -220,6 +220,7 @@ class FileHelper
                     'pptx',
                     'ppt',
                     'zip',
+                    'json',
                 ]),
                 new Size('2M'),
             ],

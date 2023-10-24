@@ -57,6 +57,7 @@ use Platine\Container\ContainerInterface;
 use Platine\Database\Connection;
 use Platine\Etl\Etl;
 use Platine\Etl\Extractor\CsvExtractor;
+use Platine\Etl\Extractor\JsonExtractor;
 use Platine\Etl\Loader\CsvFileLoader;
 use Platine\Etl\Loader\JsonFileLoader;
 use Platine\Framework\Service\ServiceProvider;
@@ -103,6 +104,17 @@ class EtlServiceProvider extends ServiceProvider
                     $definition->text_delimiter ?? '"',
                     $definition->escape_char ?? '\\'
                 );
+            };
+        });
+
+        $this->app->share('json_file_extractor', function (ContainerInterface $app) {
+            return function (
+                DataDefinition $definition,
+                array $dataFields,
+                string $path,
+                array $filters = []
+            ) {
+                return new JsonExtractor(JsonExtractor::EXTRACT_FROM_FILE);
             };
         });
 

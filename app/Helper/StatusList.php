@@ -122,6 +122,7 @@ class StatusList
     {
         return [
             'csv_file_extractor' => $this->lang->tr('Fichier (CSV)'),
+            'json_file_extractor' => $this->lang->tr('Fichier (JSON)'),
             'repository_extractor' => $this->lang->tr('Modèle (Repository)'),
         ];
     }
