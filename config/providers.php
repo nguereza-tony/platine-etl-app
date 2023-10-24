@@ -2,6 +2,7 @@
 
 use Platine\App\Module\Etl\Provider\EtlActionServiceProvider;
 use Platine\App\Module\Etl\Provider\EtlRepositoryServiceProvider;
+use Platine\App\Module\Etl\Provider\EtlRouteServiceProvider;
 use Platine\App\Module\Etl\Provider\EtlServiceProvider;
 use Platine\App\Provider\AppServiceProvider;
 use Platine\App\Provider\ConsoleServiceProvider;
@@ -50,5 +51,6 @@ use Platine\Framework\Service\Provider\TemplateServiceProvider;
         EtlServiceProvider::class,
         EtlActionServiceProvider::class,
         EtlRepositoryServiceProvider::class,
+        EtlRouteServiceProvider::class,
         PDFServiceProvider::class,
     ];

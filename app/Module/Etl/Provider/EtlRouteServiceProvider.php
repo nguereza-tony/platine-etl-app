@@ -30,9 +30,9 @@
  */
 
 /**
- *  @file EtlActionServiceProvider.php
+ *  @file EtlRouteServiceProvider.php
  *
- *  The ETL Action service provider class
+ *  The ETL Route service provider class
  *
  *  @package    Platine\App\Module\Etl\Provider
  *  @author Platine Developers team
@@ -65,34 +65,57 @@ use Platine\App\Module\Etl\Action\Import\DataDefinitionImportDetailAction;
 use Platine\App\Module\Etl\Action\Import\DataDefinitionImportListAction;
 use Platine\App\Module\Etl\Action\Import\DataDefinitionImportProcessAction;
 use Platine\Framework\Service\ServiceProvider;
+use Platine\Route\Router;
 
 /**
- * @class EtlActionServiceProvider
+ * @class EtlRouteServiceProvider
  * @package Platine\App\Module\Etl\Provider
  */
-class EtlActionServiceProvider extends ServiceProvider
+class EtlRouteServiceProvider extends ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
     public function register(): void
     {
-        $this->app->bind(DataDefinitionListAction::class);
-        $this->app->bind(DataDefinitionDetailAction::class);
-        $this->app->bind(DataDefinitionCreateAction::class);
-        $this->app->bind(DataDefinitionEditAction::class);
-        $this->app->bind(DataDefinitionDeleteAction::class);
-        $this->app->bind(DataDefinitionCopyAction::class);
-        $this->app->bind(DataDefinitionFieldCreateAction::class);
-        $this->app->bind(DataDefinitionFieldDeleteAction::class);
-        $this->app->bind(DataDefinitionFieldEditAction::class);
-        $this->app->bind(DataDefinitionExportListAction::class);
-        $this->app->bind(DataDefinitionExportProcessAction::class);
-        $this->app->bind(DataDefinitionImportListAction::class);
-        $this->app->bind(DataDefinitionImportCreateAction::class);
-        $this->app->bind(DataDefinitionImportDetailAction::class);
-        $this->app->bind(DataDefinitionImportProcessAction::class);
-        $this->app->bind(DataDefinitionImportCancelAction::class);
-        $this->app->bind(DataDefinitionImportDeleteAction::class);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addRoutes(Router $router): void
+    {
+        $router->group('/etl', function (Router $router) {
+            $router->group('/definitions', function (Router $router) {
+                $router->get('', DataDefinitionListAction::class, 'data_definition_list');
+                $router->get('/detail/{id}', DataDefinitionDetailAction::class, 'data_definition_detail');
+                $router->get('/delete/{id}', DataDefinitionDeleteAction::class, 'data_definition_delete');
+                $router->get('/copy/{id}', DataDefinitionCopyAction::class, 'data_definition_copy');
+                $router->add('/create', DataDefinitionCreateAction::class, ['GET', 'POST'], 'data_definition_create');
+                $router->add('/update/{id}', DataDefinitionEditAction::class, ['GET', 'POST'], 'data_definition_edit');
+
+                // Fields
+                $router->group('/fields', function (Router $router) {
+                    $router->add('/create/{id}', DataDefinitionFieldCreateAction::class, ['GET', 'POST'], 'data_definition_field_create');
+                    $router->add('/update/{id}', DataDefinitionFieldEditAction::class, ['GET', 'POST'], 'data_definition_field_edit');
+                    $router->get('/delete/{id}', DataDefinitionFieldDeleteAction::class, 'data_definition_field_delete');
+                });
+            });
+            // Export
+            $router->group('/export', function (Router $router) {
+                $router->get('', DataDefinitionExportListAction::class, 'data_definition_export_list');
+                $router->add('/process/{id}', DataDefinitionExportProcessAction::class, ['GET', 'POST'], 'data_definition_export_process');
+            });
+
+            // Import
+            $router->group('/import', function (Router $router) {
+                $router->get('', DataDefinitionImportListAction::class, 'data_definition_import_list');
+                $router->add('/create', DataDefinitionImportCreateAction::class, ['GET', 'POST'], 'data_definition_import_create');
+                $router->get('/detail/{id}', DataDefinitionImportDetailAction::class, 'data_definition_import_detail');
+                $router->get('/process/{id}', DataDefinitionImportProcessAction::class, 'data_definition_import_process');
+                $router->get('/cancel/{id}', DataDefinitionImportCancelAction::class, 'data_definition_import_cancel');
+                $router->get('/delete/{id}', DataDefinitionImportDeleteAction::class, 'data_definition_import_delete');
+            });
+        });
     }
 }

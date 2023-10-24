@@ -8,9 +8,9 @@ use Platine\App\Enum\YesNoStatus;
 use Platine\App\Helper\ActionHelper;
 use Platine\App\Http\Action\BaseAction;
 use Platine\App\Module\Etl\Entity\DataDefinition;
+use Platine\App\Module\Etl\Enum\DataDefinitionDirection;
 use Platine\App\Module\Etl\Repository\DataDefinitionFieldRepository;
 use Platine\App\Module\Etl\Repository\DataDefinitionRepository;
-use Platine\App\Module\Etl\Enum\DataDefinitionDirection;
 use Platine\Http\ResponseInterface;
 
 /**
@@ -85,7 +85,6 @@ class DataDefinitionDetailAction extends BaseAction
         $this->addContext('status', $this->statusList->getYesNoStatus());
 
         $definitionFields = $this->dataDefinitionFieldRepository->filters(['definition' => $id])
-                                                                ->with(['parent'])
                                                                 ->orderBy('position')
                                                                 ->all();
 
@@ -93,7 +92,7 @@ class DataDefinitionDetailAction extends BaseAction
 
         $this->addSidebar('', 'Définitions', 'data_definition_list');
         $this->addSidebar('', 'Nouvelle définition', 'data_definition_create');
-        $this->addSidebar('', 'Copier', 'data_definition_create', [], ['query' => ['from' => $id]]);
+        $this->addSidebar('', 'Copier', 'data_definition_copy', ['id' => $id], ['confirm' => true]);
         $this->addSidebar('', 'Modifier', 'data_definition_edit', ['id' => $id]);
         $this->addSidebar('', 'Ajouter un attribut', 'data_definition_field_create', ['id' => $id]);
         if (count($definitionFields) === 0) {
