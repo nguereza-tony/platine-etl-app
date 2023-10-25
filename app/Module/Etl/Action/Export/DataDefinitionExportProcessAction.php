@@ -123,7 +123,7 @@ class DataDefinitionExportProcessAction extends BaseAction
 
         $this->addContext('definition', $definition);
 
-        $exportPath = $this->config->get('platform.data_export_path');
+        $exportPath = $this->config->get('platform.data_temp_path');
         // if no filter export directly
         if ($definition->filter === null) {
             try {

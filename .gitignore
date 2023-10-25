@@ -13,4 +13,4 @@ storage/tmp/cache/*
 storage/tmp/session/*
 !storage/tmp/session/.gitignore
 storage/data/attachments/**/*
-storage/data/export/**/*
+storage/data/tmp/**/*
